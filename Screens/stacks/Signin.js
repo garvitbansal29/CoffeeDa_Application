@@ -7,9 +7,9 @@ import {
   Button,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {} from 'react-native-gesture-handler';
+import {setToken} from '../../Components/SessionToken';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ const App = ({navigation}) => {
   const [isLoading, setLoading] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPass] = useState('');
-  const [returnToken, setToken] = useState('');
+  // const [returnToken, setToken] = useState('');
 
   const reqLogin = () => {
     setLoading(true);
@@ -44,8 +44,7 @@ const App = ({navigation}) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setToken(responseJson.session_token);
-        setLoading(false);
+        setToken(responseJson.token);
         navigation.navigate('home');
         console.log(`Login Successful, ID: ${responseJson.id}`);
       })

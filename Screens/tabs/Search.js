@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet, Button} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {getToken} from '../../Components/SessionToken';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,13 +19,17 @@ const styles = StyleSheet.create({
 });
 
 const App = ({navigation}) => {
+  const handleSearch = () => {
+    // navigation.navigate('SearchResult');
+    // console.log(`user token: ${getToken()}`);
+    getToken().then((res) => {
+      console.log(res);
+    });
+  };
   return (
     <View style={styles.container}>
       <TextInput placeholder="Enter email" />
-      <Button
-        title="Submit"
-        onPress={() => navigation.navigate('SearchResult')}
-      />
+      <Button title="Submit" onPress={() => handleSearch()} />
     </View>
   );
 };

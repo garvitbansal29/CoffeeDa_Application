@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {setToken} from '../../Components/SessionToken';
 
 const App = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -24,7 +25,7 @@ const App = ({navigation}) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setLoading(false);
-        navigation.navigate('home');
+        navigation.navigate('SignIn');
         console.log(`Registration Successful, ID: ${responseJson.id}`);
       })
       .catch((error) => {
