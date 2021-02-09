@@ -18,54 +18,54 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-  function Home() {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Search" component={Search} />
-        <Tab.Screen name="Favourite" component={Favourite} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
-    );
-  }
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="SignIn"
-          component={SignIn}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen
-          name="home"
-          component={Home}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-
-  //REMOVE THIS AND UNCOMMENT PREVIOUS COMMENTED SECTION - ALL OF IT
-
-  // function returnSearchRes() {
+  // function Home() {
   //   return (
-  //     <Stack.Navigator>
-  //       <Stack.Screen name="Search" component={Search} />
-  //       <Stack.Screen name="SearchResult" component={SearchResult} />
-  //       <Stack.Screen name="LocationReviews" component={LocationReviews} />
-  //       <Stack.Screen name="EnterReviewScreen" component={EnterReviewScreen} />
-  //     </Stack.Navigator>
+  //     <Tab.Navigator>
+  //       <Tab.Screen name="Search" component={Search} />
+  //       <Tab.Screen name="Favourite" component={Favourite} />
+  //       <Tab.Screen name="Settings" component={Settings} />
+  //     </Tab.Navigator>
   //   );
   // }
   // return (
   //   <NavigationContainer>
-  //     <Tab.Navigator>
-  //       <Tab.Screen name="returnSearch" component={returnSearchRes} />
-  //       <Tab.Screen name="Favourite" component={Favourite} />
-  //       <Tab.Screen name="Settings" component={Settings} />
-  //     </Tab.Navigator>
+  //     <Stack.Navigator>
+  //       <Stack.Screen
+  //         name="SignIn"
+  //         component={SignIn}
+  //         options={{headerShown: false}}
+  //       />
+  //       <Stack.Screen name="SignUp" component={SignUp} />
+  //       <Stack.Screen
+  //         name="home"
+  //         component={Home}
+  //         options={{headerShown: false}}
+  //       />
+  //     </Stack.Navigator>
   //   </NavigationContainer>
   // );
+
+  // REMOVE THIS AND UNCOMMENT PREVIOUS COMMENTED SECTION - ALL OF IT
+
+  function returnSearchRes() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="SearchResult" component={SearchResult} />
+        <Stack.Screen name="LocationReviews" component={LocationReviews} />
+        <Stack.Screen name="EnterReviewScreen" component={EnterReviewScreen} />
+      </Stack.Navigator>
+    );
+  }
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="returnSearch" component={returnSearchRes} />
+        <Tab.Screen name="Favourite" component={Favourite} />
+        <Tab.Screen name="Settings" component={Settings} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;

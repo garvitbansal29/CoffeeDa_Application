@@ -20,11 +20,8 @@ const styles = StyleSheet.create({
 
 const App = ({navigation}) => {
   const handleSearch = () => {
-    // navigation.navigate('SearchResult');
+    navigation.navigate('SearchResult');
     // console.log(`user token: ${getToken()}`);
-    getToken().then((res) => {
-      console.log(res);
-    });
   };
   return (
     <View style={styles.container}>
