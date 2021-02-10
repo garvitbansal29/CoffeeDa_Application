@@ -1,30 +1,15 @@
 import React, {useState} from 'react';
 import {
-  Text,
   View,
   StyleSheet,
-  TextInput,
-  Button,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
+import {Button, Text, TextInput} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
 import {setToken} from '../../Components/SessionToken';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#566EA4',
-  },
-  middle: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 150,
-    marginHorizontal: 70,
-  },
-});
+import {styles} from '../../Components/AppStyle';
 
 const App = ({navigation}) => {
   const [isLoading, setLoading] = useState(false);
@@ -63,26 +48,41 @@ const App = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.middle}>
-        <Text>Signin Page</Text>
-        <TextInput
-          autoCompleteType="email"
-          placeholder="Enter email"
-          onChangeText={(inputTxt) => setLoginEmail(inputTxt)}
-        />
-        <TextInput
-          autoCompleteType="password"
-          placeholder="Enter Password"
-          secureTextEntry
-          onChangeText={(inputTxt) => setLoginPass(inputTxt)}
-        />
-        <Button title="Submit" onPress={() => reqLogin()} />
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text>Click here to register</Text>
-        </TouchableOpacity>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.container}>
+        <View style={styles.middle}>
+          <Text style={styles.titleText}>Sign In</Text>
+          <TextInput
+            style={styles.textInput}
+            autoCompleteType="email"
+            label="Enter email"
+            mode="flat"
+            onChangeText={(inputTxt) => setLoginEmail(inputTxt)}
+            dense
+          />
+          <TextInput
+            style={styles.textInput}
+            // autoCompleteType="password"
+            label="Enter Password"
+            mode="flat"
+            // secureTextEntry
+            onChangeText={(inputTxt) => setLoginPass(inputTxt)}
+          />
+
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => reqLogin()}>
+            Log In{' '}
+          </Button>
+          <TouchableOpacity
+            style={{alignItems: 'center'}}
+            onPress={() => navigation.navigate('SignUp')}>
+            <Text>Click here to register</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
