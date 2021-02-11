@@ -2,7 +2,7 @@ const defaultColourPallet = {
   primary: '#39538D',
   accent: '#F5DF73',
   background: '#8598C4',
-  surface: '#FFCDA3',
+  surface: '#FFFFFF',
   error: '#B00020',
   // text: 'black',
   // onBackground: '#000000',

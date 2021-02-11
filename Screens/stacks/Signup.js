@@ -84,7 +84,8 @@ const App = ({navigation}) => {
           <Button
             style={styles.button}
             mode="contained"
-            onPress={() => handleRegistration()}>
+            onPress={() => handleRegistration()}
+          >
             Register
           </Button>
         </View>

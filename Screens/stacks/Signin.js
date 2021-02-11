@@ -67,12 +67,14 @@ const App = ({navigation}) => {
           <Button
             style={styles.button}
             mode="contained"
-            onPress={() => reqLogin()}>
+            onPress={() => reqLogin()}
+          >
             Log In
           </Button>
           <Button
             style={{alignItems: 'center', margin: 12}}
-            onPress={() => navigation.navigate('SignUp')}>
+            onPress={() => navigation.navigate('SignUp')}
+          >
             Click here to register
           </Button>
         </View>
