@@ -1,15 +1,9 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-} from 'react-native';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {Button, Text, TextInput, ActivityIndicator} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
 import {setToken} from '../../Components/SessionToken';
-import {styles} from '../../Components/AppStyle';
+import {styles, backgroundStyles} from '../../Components/AppStyle';
 
 const App = ({navigation}) => {
   const [isLoading, setLoading] = useState(false);
@@ -49,7 +43,7 @@ const App = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
-      <View style={styles.container}>
+      <View style={backgroundStyles.containerWithAlignAndJustify}>
         <View style={styles.middle}>
           <Text style={styles.titleText}>Sign In</Text>
           <TextInput
@@ -76,11 +70,11 @@ const App = ({navigation}) => {
             onPress={() => reqLogin()}>
             Log In
           </Button>
-          <TouchableOpacity
+          <Button
             style={{alignItems: 'center', margin: 12}}
             onPress={() => navigation.navigate('SignUp')}>
-            <Text>Click here to register</Text>
-          </TouchableOpacity>
+            Click here to register
+          </Button>
         </View>
       </View>
     </ScrollView>

@@ -2,12 +2,6 @@ import {StyleSheet} from 'react-native';
 import defaultColourPallet from './ColourPallet';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: defaultColourPallet.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   middle: {
     backgroundColor: defaultColourPallet.surface,
     // marginHorizontal: 24,
@@ -39,6 +33,18 @@ const styles = StyleSheet.create({
     margin: 24,
   },
 });
-const styles2 = StyleSheet.create({});
 
-export {styles, styles2};
+const backgroundStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: defaultColourPallet.primary,
+  },
+  containerWithAlignAndJustify: {
+    flex: 1,
+    backgroundColor: defaultColourPallet.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export {styles, backgroundStyles};

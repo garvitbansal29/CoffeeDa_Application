@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {Button, Text, TextInput, ActivityIndicator} from 'react-native-paper';
-import {styles} from '../../Components/AppStyle';
+import {styles, backgroundStyles} from '../../Components/AppStyle';
 
 const App = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -43,7 +43,7 @@ const App = ({navigation}) => {
   }
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
-      <View style={styles.container}>
+      <View style={backgroundStyles.containerWithAlignAndJustify}>
         <View style={styles.middle}>
           <Text style={styles.titleText}>Register</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
