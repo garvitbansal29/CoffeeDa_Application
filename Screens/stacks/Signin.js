@@ -53,30 +53,31 @@ const App = ({navigation}) => {
         <View style={styles.middle}>
           <Text style={styles.titleText}>Sign In</Text>
           <TextInput
-            style={styles.textInput}
+            style={styles.fullSizeTextInput}
             autoCompleteType="email"
             label="Enter email"
-            mode="flat"
+            mode="outlined"
             onChangeText={(inputTxt) => setLoginEmail(inputTxt)}
             dense
           />
           <TextInput
-            style={styles.textInput}
-            // autoCompleteType="password"
+            style={styles.fullSizeTextInput}
+            autoCompleteType="password"
             label="Enter Password"
-            mode="flat"
-            // secureTextEntry
+            mode="outlined"
+            secureTextEntry
             onChangeText={(inputTxt) => setLoginPass(inputTxt)}
+            dense
           />
 
           <Button
             style={styles.button}
             mode="contained"
             onPress={() => reqLogin()}>
-            Log In{' '}
+            Log In
           </Button>
           <TouchableOpacity
-            style={{alignItems: 'center'}}
+            style={{alignItems: 'center', margin: 12}}
             onPress={() => navigation.navigate('SignUp')}>
             <Text>Click here to register</Text>
           </TouchableOpacity>

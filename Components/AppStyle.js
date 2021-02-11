@@ -5,29 +5,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: defaultColourPallet.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   middle: {
-    flex: 1,
     backgroundColor: defaultColourPallet.surface,
-    marginVertical: 150,
-    marginHorizontal: 70,
+    // marginHorizontal: 24,
+    margin: 24,
+    padding: 6,
   },
   titleText: {
     marginTop: 24,
-    marginLeft: 25,
+    marginLeft: 24,
     fontWeight: 'bold',
     fontSize: 25,
   },
-  textInput: {
+  fullSizeTextInput: {
     marginHorizontal: 24,
-    marginTop: 24,
+    marginTop: 12,
+    height: 40,
+    width: 250,
+    fontSize: 16,
+  },
+  halfSizeTextInput: {
+    marginHorizontal: 10,
+    marginTop: 12,
+    height: 40,
+    width: 110,
+
+    fontSize: 16,
   },
   button: {
-    marginHorizontal: 24,
-    marginTop: 24,
-  },
-  horizontalCenter: {
-    marginHorizontal: 24,
+    margin: 24,
   },
 });
 const styles2 = StyleSheet.create({});

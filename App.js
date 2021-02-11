@@ -35,7 +35,11 @@ const App = () => {
           component={SignIn}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{title: 'Coffee Da'}}
+        />
         <Stack.Screen
           name="home"
           component={Home}

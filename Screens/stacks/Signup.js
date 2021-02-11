@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Button, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
-import {setToken} from '../../Components/SessionToken';
+import {View, ScrollView} from 'react-native';
+import {Button, Text, TextInput, ActivityIndicator} from 'react-native-paper';
+import {styles} from '../../Components/AppStyle';
 
 const App = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -34,31 +34,62 @@ const App = ({navigation}) => {
       });
   };
 
+  if (isLoading) {
+    return (
+      <View style={{flex: 1}}>
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
+  }
   return (
-    <View>
-      <TextInput
-        autoCompleteType="name"
-        placeholder="Enter First Name"
-        onChangeText={(inputTxt) => setFirstName(inputTxt)}
-      />
-      <TextInput
-        autoCompleteType="name"
-        placeholder="Enter Last Name"
-        onChangeText={(inputTxt) => setLastName(inputTxt)}
-      />
-      <TextInput
-        autoCompleteType="email"
-        placeholder="Enter Email"
-        onChangeText={(inputTxt) => setEmail(inputTxt)}
-      />
-      <TextInput
-        autoCompleteType="password"
-        placeholder="Enter Password"
-        secureTextEntry
-        onChangeText={(inputTxt) => setPassword(inputTxt)}
-      />
-      <Button title="Register" onPress={() => handleRegistration()} />
-    </View>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.container}>
+        <View style={styles.middle}>
+          <Text style={styles.titleText}>Register</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <TextInput
+              style={styles.halfSizeTextInput}
+              autoCompleteType="name"
+              label="First Name"
+              mode="outlined"
+              onChangeText={(inputTxt) => setFirstName(inputTxt)}
+              dense
+            />
+            <TextInput
+              style={styles.halfSizeTextInput}
+              autoCompleteType="name"
+              label="Last Name"
+              mode="outlined"
+              onChangeText={(inputTxt) => setLastName(inputTxt)}
+              dense
+            />
+          </View>
+          <TextInput
+            style={styles.fullSizeTextInput}
+            autoCompleteType="email"
+            label="Email"
+            mode="outlined"
+            onChangeText={(inputTxt) => setEmail(inputTxt)}
+            dense
+          />
+          <TextInput
+            style={styles.fullSizeTextInput}
+            autoCompleteType="password"
+            label="Password"
+            mode="outlined"
+            secureTextEntry
+            onChangeText={(inputTxt) => setPassword(inputTxt)}
+            dense
+          />
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => handleRegistration()}>
+            Register
+          </Button>
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
