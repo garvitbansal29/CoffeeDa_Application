@@ -2,7 +2,9 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {} from 'react-native';
 
 import SignIn from './Screens/stacks/Signin';
@@ -15,7 +17,7 @@ import LocationReviews from './Screens/stacks/LocationReview';
 import EnterReviewScreen from './Screens/stacks/EnterReview';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
   // function Home() {
@@ -64,9 +66,45 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="returnSearch" component={returnSearchRes} />
-        <Tab.Screen name="Favourite" component={Favourite} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen
+          name="Search"
+          component={returnSearchRes}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="feature-search"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Favourite"
+          component={Favourite}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="account-settings"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
