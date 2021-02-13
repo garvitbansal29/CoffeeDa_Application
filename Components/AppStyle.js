@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   titleText: {
+    flex: 1,
     marginTop: 24,
     marginLeft: 24,
     fontWeight: 'bold',
@@ -44,6 +45,9 @@ const backgroundStyles = StyleSheet.create({
     backgroundColor: defaultColourPallet.primary,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imgHeaderContainer: {
+    paddingTop: 100,
   },
 });
 

@@ -3,8 +3,10 @@ import {View, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Surface, Card, Button} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
+import {useNavigation} from '@react-navigation/native';
 
 const LocationDisplay = (props) => {
+  const navigation = useNavigation();
   const styles = StyleSheet.create({
     surface: {
       flex: 0,
@@ -45,7 +47,11 @@ const LocationDisplay = (props) => {
 
         <Card.Cover source={{uri: item.image}} />
         <Card.Actions style={{justifyContent: 'flex-end'}}>
-          <Button>Ok</Button>
+          <Button
+            onPress={() => navigation.navigate('LocationReviews', {props})}
+          >
+            Ok
+          </Button>
         </Card.Actions>
       </Card>
     </Surface>

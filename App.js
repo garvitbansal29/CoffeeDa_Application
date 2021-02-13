@@ -52,71 +52,62 @@ const App = () => {
   //   </NavigationContainer>
   // );
   // REMOVE THIS AND UNCOMMENT PREVIOUS COMMENTED SECTION - ALL OF IT
-  // function returnSearchRes() {
-  //   return (
-  //     <Stack.Navigator>
-  //       <Stack.Screen name="Search" component={Search} />
-  //       <Stack.Screen name="SearchResult" component={SearchResult} />
-  //       <Stack.Screen name="LocationReviews" component={LocationReviews} />
-  //       <Stack.Screen name="EnterReviewScreen" component={EnterReviewScreen} />
-  //     </Stack.Navigator>
-  //   );
-  // }
-  // return (
-  //   <NavigationContainer>
-  //     <Tab.Navigator>
-  //       <Tab.Screen
-  //         name="Search"
-  //         component={returnSearchRes}
-  //         options={{
-  //           tabBarIcon: ({color}) => (
-  //             <MaterialCommunityIcons
-  //               name="feature-search"
-  //               color={color}
-  //               size={26}
-  //             />
-  //           ),
-  //         }}
-  //       />
-  //       <Tab.Screen
-  //         name="Favourite"
-  //         component={Favourite}
-  //         options={{
-  //           tabBarIcon: ({color}) => (
-  //             <MaterialCommunityIcons
-  //               name="cards-heart"
-  //               color={color}
-  //               size={26}
-  //             />
-  //           ),
-  //         }}
-  //       />
-  //       <Tab.Screen
-  //         name="Settings"
-  //         component={Settings}
-  //         options={{
-  //           tabBarIcon: ({color}) => (
-  //             <MaterialCommunityIcons
-  //               name="account-settings"
-  //               color={color}
-  //               size={26}
-  //             />
-  //           ),
-  //         }}
-  //       />
-  //     </Tab.Navigator>
-  //   </NavigationContainer>
-  // );
-  return <SearchResult />;
-  // return (
-  //   <LCD
-  //     locationName="Bramhall Coffee Shop"
-  //     stars={2.5}
-  //     town="Manchester"
-  //     distance={3.3}
-  //     image="https://picsum.photos/700"
-  //   />
-  // );
+  function returnSearchRes() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="SearchResult" component={SearchResult} />
+        <Stack.Screen name="LocationReviews" component={LocationReviews} />
+        <Stack.Screen name="EnterReviewScreen" component={EnterReviewScreen} />
+      </Stack.Navigator>
+    );
+  }
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Search"
+          component={returnSearchRes}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="feature-search"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Favourite"
+          component={Favourite}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="account-settings"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+  // return <SearchResult />;
 };
 
 export default App;
