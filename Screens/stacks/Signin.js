@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 import {Button, Text, TextInput, ActivityIndicator} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
-import {setToken} from '../../Components/SessionToken';
+import {setToken, setUserID} from '../../Components/AsyncData';
 import {styles, backgroundStyles} from '../../Components/AppStyle';
 
 const App = ({navigation}) => {
@@ -24,6 +24,7 @@ const App = ({navigation}) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setToken(responseJson.token);
+        setUserID(responseJson.user_id);
         navigation.navigate('home');
         console.log(`Login Successful, ID: ${responseJson.id}`);
       })

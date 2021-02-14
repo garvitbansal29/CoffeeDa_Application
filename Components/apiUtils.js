@@ -113,4 +113,94 @@ const updateUserDetails = async (props) => {
   }
 };
 
-export {getLocationData, addReview, getUserDetails, updateUserDetails};
+const getFavouriteLocations = async (props) => {
+  const {userID} = props;
+  try {
+    const response = await getUserDetails({userID});
+    const favLocations = response.favourite_locations;
+    return favLocations;
+  } catch (error) {
+    console.log(`Error: unable to get favourite location ${error}`);
+    return [];
+  }
+};
+
+const getFavouriteLocationID = async (props) => {
+  const {userID} = props;
+  try {
+    const response = await getFavouriteLocations({userID});
+    const favLocationID = response.map((item) => {
+      return {
+        favLocationID: item.location_id,
+      };
+    });
+    console.log(`retrieved location ID's successfully`);
+    return favLocationID;
+  } catch (error) {
+    console.log(`Error: unable to get favourite location ID's ${error}`);
+    return [];
+  }
+};
+
+const updateFavourite = async (props) => {
+  const {locationID} = props;
+  const sessionToken = await getToken();
+
+  const settings = {
+    method: 'POST',
+    headers: {
+      'x-authorization': sessionToken,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/favourite`,
+      settings,
+    );
+    const {status} = response;
+    console.log(`Add Favourite Updated status  : ${status}`);
+    if (status === 200) return true;
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+const deleteFavourite = async (props) => {
+  const {locationID} = props;
+  const sessionToken = await getToken();
+
+  const settings = {
+    method: 'DELETE',
+    headers: {
+      'x-authorization': sessionToken,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/favourite`,
+      settings,
+    );
+    const {status} = response;
+    console.log(`DELETE FAVOURITE Updated status  : ${status}`);
+    if (status === 200) return true;
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export {
+  getLocationData,
+  addReview,
+  getUserDetails,
+  updateUserDetails,
+  getFavouriteLocations,
+  getFavouriteLocationID,
+  updateFavourite,
+  deleteFavourite,
+};
