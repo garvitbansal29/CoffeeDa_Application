@@ -1,31 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+import {Button, TextInput, Searchbar, Modal, Text} from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import {
-  Button,
-  Provider,
-  TextInput,
-  Searchbar,
-  Modal,
-  Text,
-} from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import {getToken, setToken} from '../../Components/SessionToken';
-import {
-  getLocationData as apiUtils,
-  getFavouriteLocationID,
-} from '../../Components/apiUtils';
+import {getLocationData as apiUtils} from '../../Components/apiUtils';
 import {styles} from '../../Components/AppStyle';
 import LocationDisplay from '../../Components/LocationDetailCard';
+import colours from '../../Components/ColourPallet';
 
 const App = () => {
+  const [spinner, setSpinner] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [locationsData, setLocationsData] = useState([]);
-  const [sessionToken, setSessionToken] = useState(
-    '6187b76c034c32fd9e4c66c2edc4613b',
-  );
 
   const [searchBarValue, setSearchBarValue] = useState('');
   const [overallRating, setOverallRating] = useState(0);
@@ -39,8 +28,8 @@ const App = () => {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
-  const getLocationData = () => {
-    apiUtils({
+  const getLocationData = async () => {
+    const response = await apiUtils({
       searchValue: searchBarValue,
       overallRating,
       priceRating,
@@ -49,19 +38,12 @@ const App = () => {
       searchIn,
       resultLimit,
       resultOffset,
-      sessionToken,
-    })
-      .then((response) => {
-        const byStarts = response.responseJson.slice(0);
-        byStarts.sort(function (a, b) {
-          return b.avg_overall_rating - a.avg_overall_rating;
-        });
-        setLocationsData(byStarts);
-      })
-
-      .catch((error) => {
-        console.log(`${error} `);
-      });
+    });
+    const sortByStars = await response.responseJson.slice(0);
+    sortByStars.sort((a, b) => {
+      return b.avg_overall_rating - a.avg_overall_rating;
+    });
+    setLocationsData(sortByStars);
   };
   const handleModalClick = () => {
     getLocationData();
@@ -71,25 +53,28 @@ const App = () => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
   useEffect(() => {
     getLocationData();
-  }, []);
+  }, [searchBarValue]);
 
   return (
-    <Provider>
+    <View style={{backgroundColor: colours.background}}>
       <Searchbar
+        theme={{placeholder: 'black'}}
         placeholder="Search"
         onChangeText={(value) => setSearchBarValue(value)}
         value={searchBarValue}
       />
       <View style={{flexDirection: 'row'}}>
         <Button
+          theme={{roundness: 0}}
           style={{flex: 1}}
-          mode="outlined"
+          mode="contained"
           onPress={() => showModal()}
           icon="tune"
         />
         <Button
+          theme={{roundness: 0}}
           style={{flex: 1}}
-          mode="outlined"
+          mode="contained"
           onPress={() => getLocationData()}
         >
           Search
@@ -160,7 +145,7 @@ const App = () => {
           <Button onPress={() => handleModalClick()}>search</Button>
         </View>
       </Modal>
-    </Provider>
+    </View>
   );
 };
 

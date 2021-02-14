@@ -1,29 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Surface, Card, Button, IconButton} from 'react-native-paper';
+import {Card, Button, IconButton} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 
+import colors from './ColourPallet';
 import {
   getFavouriteLocationID,
   updateFavourite,
   deleteFavourite,
 } from './apiUtils';
-import {useEffect} from 'react';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const LocationDisplay = (props) => {
   const navigation = useNavigation();
-  const styles = StyleSheet.create({
-    surface: {
-      flex: 0,
-      padding: 8,
-      justifyContent: 'center',
-      elevation: 12,
-      margin: 6,
-    },
-  });
-
   const {itemDetails} = props;
+
   const location = {
     cafeID: itemDetails.location_id,
     cafeName: itemDetails.location_name,
@@ -58,34 +50,42 @@ const LocationDisplay = (props) => {
     checkIsFavourite();
   }, [isFavourite]);
   return (
-    <Surface style={styles.surface}>
-      <Card onPress={() => navigation.navigate('LocationReviews', {props})}>
-        <View style={{flexDirection: 'row'}}>
-          <Card.Title
-            title={location.cafeName}
-            subtitle={location.town}
-            style={{flex: 2}}
-          />
-          <Rating
-            imageSize={23}
-            readonly
-            startingValue={location.starRating}
-            style={{flex: 1, marginTop: 10}}
-          />
-        </View>
+    // <Surface style={styles.surface}>
+    <Card
+      onPress={() => navigation.navigate('LocationReviews', {props})}
+      elevation={10}
+      style={{margin: 10}}
+    >
+      <View style={{flexDirection: 'row'}}>
+        <Card.Title
+          title={location.cafeName}
+          subtitle={location.town}
+          style={{flex: 2}}
+        />
+        <Rating
+          type="custom"
+          imageSize={25}
+          ratingColor={colors.accent}
+          ratingBackgroundColor={colors.primary}
+          tintColor={colors.surface}
+          readonly
+          startingValue={location.starRating}
+          style={{flex: 1, margin: 12}}
+        />
+      </View>
 
-        <Card.Cover source={{uri: location.image}} />
-        <Card.Actions style={{justifyContent: 'flex-end'}}>
-          <IconButton
-            // icon="camera"
-            icon={isFavourite ? 'heart' : 'heart-outline'}
-            color="#eb2d4f"
-            size={30}
-            onPress={() => updateIsFavourite()}
-          />
-        </Card.Actions>
-      </Card>
-    </Surface>
+      <Card.Cover source={{uri: location.image}} />
+      <Card.Actions style={{justifyContent: 'flex-end'}}>
+        <IconButton
+          // icon="camera"
+          icon={isFavourite ? 'heart' : 'heart-outline'}
+          color="#eb2d4f"
+          size={30}
+          onPress={() => updateIsFavourite()}
+        />
+      </Card.Actions>
+    </Card>
+    // </Surface>
   );
 };
 

@@ -1,86 +1,80 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, ScrollView} from 'react-native';
-import {Button, Text, TextInput, ActivityIndicator} from 'react-native-paper';
+import {View} from 'react-native';
+import {Button, Text, TextInput} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {setToken, setUserID} from '../../Components/AsyncData';
 import {styles, backgroundStyles} from '../../Components/AppStyle';
+import {requestLogin} from '../../Components/apiUtils';
 
 const App = ({navigation}) => {
   const [isLoading, setLoading] = useState(false);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPass] = useState('');
-  // const [returnToken, setToken] = useState('');
+  const [spinner, setSpinner] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('g@email.com');
+  const [loginPassword, setLoginPass] = useState('password');
 
-  const reqLogin = () => {
-    setLoading(true);
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: loginEmail,
-        password: loginPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setToken(responseJson.token);
-        setUserID(responseJson.user_id);
-        navigation.navigate('home');
-        console.log(`Login Successful, ID: ${responseJson.id}`);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(`Error: ${error}`);
-      });
+  const handleLogin = async () => {
+    setSpinner(true);
+    const response = await requestLogin({
+      email: loginEmail,
+      password: loginPassword,
+    });
+    setSpinner(false);
+
+    console.log(response);
+    if (response !== 'Unsuccessful') {
+      setToken(response.token);
+      setUserID(response.id.toString());
+      navigation.navigate('home');
+    }
   };
 
-  if (isLoading) {
-    return (
-      <View style={{flex: 1}}>
-        <ActivityIndicator size="small" color="#0000ff" />
-      </View>
-    );
-  }
-
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
-      <View style={backgroundStyles.containerWithAlignAndJustify}>
-        <View style={styles.middle}>
-          <Text style={styles.titleText}>Sign In</Text>
-          <TextInput
-            style={styles.fullSizeTextInput}
-            autoCompleteType="email"
-            label="Enter email"
-            mode="outlined"
-            onChangeText={(inputTxt) => setLoginEmail(inputTxt)}
-            dense
-          />
-          <TextInput
-            style={styles.fullSizeTextInput}
-            autoCompleteType="password"
-            label="Enter Password"
-            mode="outlined"
-            secureTextEntry
-            onChangeText={(inputTxt) => setLoginPass(inputTxt)}
-            dense
-          />
+    // <ScrollView contentContainerStyle={{flexGrow: 1}}>
+    <View style={backgroundStyles.containerWithAlignAndJustify}>
+      <Spinner
+        visible={spinner}
+        textContent="Loading..."
+        textStyle={{color: '#FFF'}}
+      />
+      <View style={styles.middle}>
+        <Text style={styles.titleText}>Sign In</Text>
+        <TextInput
+          style={styles.fullSizeTextInput}
+          autoCompleteType="email"
+          label="Enter email"
+          mode="outlined"
+          value={loginEmail}
+          onChangeText={(inputTxt) => setLoginEmail(inputTxt)}
+          dense
+        />
+        <TextInput
+          style={styles.fullSizeTextInput}
+          autoCompleteType="password"
+          label="Enter Password"
+          mode="outlined"
+          value={loginPassword}
+          secureTextEntry
+          onChangeText={(inputTxt) => setLoginPass(inputTxt)}
+          dense
+        />
 
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={() => reqLogin()}
-          >
-            Log In
-          </Button>
-          <Button
-            style={{alignItems: 'center', margin: 12}}
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            Click here to register
-          </Button>
-        </View>
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => handleLogin()}
+        >
+          Log In
+        </Button>
+        <Button
+          style={{alignItems: 'center', margin: 12}}
+          onPress={() => navigation.navigate('SignUp')}
+        >
+          Click here to register
+        </Button>
       </View>
-    </ScrollView>
+    </View>
+    // </ScrollView>
   );
 };
 

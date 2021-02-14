@@ -3,17 +3,18 @@ import defaultColourPallet from './ColourPallet';
 
 const styles = StyleSheet.create({
   middle: {
-    backgroundColor: defaultColourPallet.surface,
+    flex: 0,
+    backgroundColor: defaultColourPallet.background,
     // marginHorizontal: 24,
     margin: 24,
     padding: 6,
   },
   titleText: {
-    flex: 1,
     marginTop: 24,
     marginLeft: 24,
     fontWeight: 'bold',
     fontSize: 25,
+    // color: 'black',
   },
   fullSizeTextInput: {
     marginHorizontal: 24,
@@ -38,11 +39,11 @@ const styles = StyleSheet.create({
 const backgroundStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: defaultColourPallet.primary,
+    backgroundColor: defaultColourPallet.background,
   },
   containerWithAlignAndJustify: {
     flex: 1,
-    backgroundColor: defaultColourPallet.primary,
+    backgroundColor: defaultColourPallet.onBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },

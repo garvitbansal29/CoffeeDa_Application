@@ -1,15 +1,16 @@
 const defaultColourPallet = {
-  primary: '#8598C4',
-  accent: '#F5DF73',
-  background: '#8598C4',
-  surface: '#FFFFFF',
+  primary: '#62959c',
+  accent: '#00303f',
+
+  surface: '#cdac81',
+
+  background: '#c19277',
+  onBackground: '#a1775f',
+
   error: '#B00020',
-  secondary: '#8F480C',
-  text: 'white',
-  // onBackground: '#000000',
-  // onSurface: '#000000',
+  text: 'black',
   // disabled: color(black).alpha(0.26).rgb().string(),
-  // placeholder: color(black).alpha(0.54).rgb().string(),
+  placeholder: '#a1775f',
   // backdrop: color(black).alpha(0.5).rgb().string(),
   // notification: '#F50057',
 };

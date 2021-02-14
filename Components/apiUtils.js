@@ -1,5 +1,30 @@
 import {getToken} from './SessionToken';
 
+const requestLogin = async (props) => {
+  const {email, password} = props;
+
+  const settings = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  };
+
+  try {
+    const response = await fetch(
+      'http://10.0.2.2:3333/api/1.0.0/user/login',
+      settings,
+    );
+    const responseJson = await response.json();
+    return responseJson;
+  } catch (error) {
+    console.log(`Error: Loggin in: ${error}`);
+    return 'Unsuccessful';
+  }
+};
+
 const getLocationData = async (props) => {
   const sessionToken = await getToken();
 
@@ -195,6 +220,7 @@ const deleteFavourite = async (props) => {
 };
 
 export {
+  requestLogin,
   getLocationData,
   addReview,
   getUserDetails,

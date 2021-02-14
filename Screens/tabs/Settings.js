@@ -2,22 +2,24 @@ import React, {useState, useEffect} from 'react';
 import {Alert, View} from 'react-native';
 import {Button, TextInput, Title} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 import {getUserDetails, updateUserDetails} from '../../Components/apiUtils';
 
 const App = () => {
+  const [spinner, setSpinner] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  async function getUserInfo() {
+  async function showUserDetails() {
+    setSpinner(true);
     const userInfo = await getUserDetails({userID: 9});
     setFirstName(userInfo.first_name);
     setLastName(userInfo.last_name);
     setEmail(userInfo.email);
+    setSpinner(false);
   }
 
   const updateUserInfo = async () => {
@@ -25,23 +27,28 @@ const App = () => {
       firstName,
       lastName,
       email,
-      password,
       userID: 9,
     });
     if (response) {
-      Alert.alert('Update Successful');
       setIsDisabled(true);
-      await getUserInfo();
+      await showUserDetails();
+      Alert.alert('Update Successful');
     } else {
       Alert.alert('Update Unsuccessful');
     }
   };
 
   useEffect(() => {
-    getUserInfo();
+    showUserDetails();
   }, []);
+
   return (
     <View>
+      <Spinner
+        visible={spinner}
+        textContent="Loading..."
+        textStyle={{color: '#FFF'}}
+      />
       <Title style={{alignSelf: 'center', color: 'black'}}> Account</Title>
 
       <Button

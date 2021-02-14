@@ -34,109 +34,106 @@ const App = ({navigation, route}) => {
   const locationReviews = itemDetails.location_reviews;
 
   return (
-    <Provider>
-      <View style={backgroundStyles.container}>
-        <Image
-          style={backgroundStyles.imgHeaderContainer}
-          source={{uri: locationDetails.image}}
-        />
-        <View
+    <View style={backgroundStyles.container}>
+      <Image
+        style={backgroundStyles.imgHeaderContainer}
+        source={{uri: locationDetails.image}}
+      />
+      <View
+        style={{
+          padding: 10,
+          flexDirection: 'row',
+          borderBottomColor: 'white',
+          borderBottomWidth: 3,
+          justifyContent: 'center',
+        }}
+      >
+        <Title style={styles.titleText}>{locationDetails.cafeName}</Title>
+        <Rating
+          imageSize={30}
+          startingValue={locationDetails.starRating}
+          type="custom"
+          ratingBackgroundColor="white"
+          readonly
+          ratingColor={colours.secondary}
+          tintColor={colours.primary}
+          showRating
+          ratingTextColor="black"
           style={{
-            padding: 10,
-            flexDirection: 'row',
-            borderBottomColor: 'white',
-            borderBottomWidth: 3,
-            justifyContent: 'center',
-            // alignItems: 'center',
+            flex: 1,
+            marginTop: 12,
           }}
-        >
-          <Title style={styles.titleText}>{locationDetails.cafeName}</Title>
-          <Rating
-            imageSize={30}
-            startingValue={locationDetails.starRating}
-            type="custom"
-            ratingBackgroundColor="white"
-            readonly
-            ratingColor={colours.secondary}
-            tintColor={colours.primary}
-            showRating
-            ratingTextColor="black"
-            style={{
-              flex: 1,
-              marginTop: 12,
-            }}
-          />
-        </View>
-        {/* display all the different ratings */}
-        <View>
-          <RatingIndicator
-            fullSize={250}
-            rating={locationDetails.starRating}
-            label="Overall Rating"
-          />
-          <RatingIndicator
-            fullSize={250}
-            rating={locationDetails.priceRating}
-            label="Price Rating"
-          />
-          <RatingIndicator
-            fullSize={250}
-            rating={locationDetails.qualityRating}
-            label="Quality Rating"
-          />
-          <RatingIndicator
-            fullSize={250}
-            rating={locationDetails.cleanlinessRating}
-            label="Cleanliness Rating"
-          />
-        </View>
+        />
+      </View>
+      {/* display all the different ratings */}
+      <View>
+        <RatingIndicator
+          fullSize={250}
+          rating={locationDetails.starRating}
+          label="Overall Rating"
+        />
+        <RatingIndicator
+          fullSize={250}
+          rating={locationDetails.priceRating}
+          label="Price Rating"
+        />
+        <RatingIndicator
+          fullSize={250}
+          rating={locationDetails.qualityRating}
+          label="Quality Rating"
+        />
+        <RatingIndicator
+          fullSize={250}
+          rating={locationDetails.cleanlinessRating}
+          label="Cleanliness Rating"
+        />
+      </View>
 
-        <View style={{flex: 1}}>
-          <View style={{flexDirection: 'row'}}>
-            <Title style={{flex: 1}}>Review</Title>
+      <View style={{flex: 1}}>
+        <View style={{flexDirection: 'row'}}>
+          <Title style={{flex: 1}}>Review</Title>
 
-            <Button
-              style={{flex: 1}}
-              mode="contained"
-              onPress={() => {
-                showModal();
-              }}
-            >
-              Add Review
-            </Button>
-          </View>
-          <View>
-            <FlatList
-              data={locationReviews}
-              renderItem={({item}) => <ReviewCard cardDetails={item} />}
-              keyExtractor={(item) => item.review_id.toString()}
-              contentContainerStyle={{
-                paddingBottom: 35,
-              }}
-            />
-          </View>
-        </View>
-        <Portal>
-          <Modal
-            contentContainerStyle={containerStyle}
-            transparent
-            animationType="slide"
-            backdropOpacity={1}
-            backdropColor="white"
-            visible={modalVisible}
-            dismissable
-            onDismiss={() => {
-              hideModal();
+          <Button
+            style={{flex: 1}}
+            mode="contained"
+            onPress={() => {
+              showModal();
             }}
           >
-            <AddReviewForm
-              locationID={locationDetails.cafeID}
-              locationName={locationDetails.cafeName}
-            />
-          </Modal>
-        </Portal>
+            Add Review
+          </Button>
+        </View>
+        <View>
+          <FlatList
+            data={locationReviews}
+            renderItem={({item}) => <ReviewCard cardDetails={item} />}
+            keyExtractor={(item) => item.review_id.toString()}
+            contentContainerStyle={{
+              paddingBottom: 35,
+            }}
+          />
+        </View>
       </View>
-    </Provider>
+      <Portal>
+        <Modal
+          contentContainerStyle={containerStyle}
+          transparent
+          animationType="slide"
+          backdropOpacity={1}
+          backdropColor="white"
+          visible={modalVisible}
+          dismissable
+          onDismiss={() => {
+            hideModal();
+          }}
+        >
+          <AddReviewForm
+            locationID={locationDetails.cafeID}
+            locationName={locationDetails.cafeName}
+          />
+        </Modal>
+      </Portal>
+    </View>
   );
 };
 

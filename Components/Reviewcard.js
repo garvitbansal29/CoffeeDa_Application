@@ -22,7 +22,8 @@ const App = (props) => {
 
   return (
     <Surface
-      style={{backgroundColor: colours.primary, elevation: 6, margin: 6}}
+      theme={{roundness: 5}}
+      style={{backgroundColor: colours.surface, elevation: 6, margin: 6}}
     >
       <Text>{review.reviewBody}</Text>
       <View style={{marginHorizontal: 65}}>

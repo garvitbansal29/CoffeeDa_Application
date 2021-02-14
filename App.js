@@ -14,54 +14,28 @@ import Favourite from './Screens/tabs/Favourite';
 import Settings from './Screens/tabs/Settings';
 import SearchResult from './Screens/stacks/SearchResult';
 import LocationReviews from './Screens/stacks/LocationReview';
+import Colours from './Components/ColourPallet';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
-  // function Home() {
-  //   return (
-  //     <Tab.Navigator>
-  //       <Tab.Screen name="Search" component={Search} />
-  //       <Tab.Screen name="Favourite" component={Favourite} />
-  //       <Tab.Screen name="Settings" component={Settings} />
-  //     </Tab.Navigator>
-  //   );
-  // }
-  // return (
-  //   <NavigationContainer>
-  //     <Stack.Navigator>
-  //       <Stack.Screen
-  //         name="SignIn"
-  //         component={SignIn}
-  //         options={{headerShown: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="SignUp"
-  //         component={SignUp}
-  //         options={{title: 'Coffee Da'}}
-  //       />
-  //       <Stack.Screen
-  //         name="home"
-  //         component={Home}
-  //         options={{headerShown: false}}
-  //       />
-  //     </Stack.Navigator>
-  //   </NavigationContainer>
-  // );
-  // REMOVE THIS AND UNCOMMENT PREVIOUS COMMENTED SECTION - ALL OF IT
   function returnSearchRes() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen
+          name="Search"
+          component={Search}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="SearchResult" component={SearchResult} />
         <Stack.Screen name="LocationReviews" component={LocationReviews} />
       </Stack.Navigator>
     );
   }
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
+  function Home() {
+    return (
+      <Tab.Navigator barStyle={{backgroundColor: Colours.accent}}>
         <Tab.Screen
           name="Search"
           component={returnSearchRes}
@@ -102,9 +76,30 @@ const App = () => {
           }}
         />
       </Tab.Navigator>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="SignIn"
+          component={SignIn}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{title: 'Coffee Da'}}
+        />
+        <Stack.Screen
+          name="home"
+          component={Home}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
-  // return <SearchResult />;
 };
 
 export default App;
