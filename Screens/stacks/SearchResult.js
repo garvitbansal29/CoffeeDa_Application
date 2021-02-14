@@ -12,7 +12,7 @@ import {
 } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import {getToken, setToken} from '../../Components/SessionToken';
-import apiUtils from '../../Components/apiUtils';
+import {getLocationData as apiUtils} from '../../Components/apiUtils';
 import {styles} from '../../Components/AppStyle';
 import LocationDisplay from '../../Components/LocationDetailCard';
 

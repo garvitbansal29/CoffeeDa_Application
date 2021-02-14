@@ -14,8 +14,6 @@ import Favourite from './Screens/tabs/Favourite';
 import Settings from './Screens/tabs/Settings';
 import SearchResult from './Screens/stacks/SearchResult';
 import LocationReviews from './Screens/stacks/LocationReview';
-import EnterReviewScreen from './Screens/stacks/EnterReview';
-import LCD from './Components/LocationDetailCard';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -58,7 +56,6 @@ const App = () => {
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="SearchResult" component={SearchResult} />
         <Stack.Screen name="LocationReviews" component={LocationReviews} />
-        <Stack.Screen name="EnterReviewScreen" component={EnterReviewScreen} />
       </Stack.Navigator>
     );
   }
@@ -92,7 +89,7 @@ const App = () => {
           }}
         />
         <Tab.Screen
-          name="Settings"
+          name="Account"
           component={Settings}
           options={{
             tabBarIcon: ({color}) => (
