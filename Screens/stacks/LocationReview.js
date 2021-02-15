@@ -5,7 +5,7 @@ import {Rating} from 'react-native-ratings';
 
 import {styles, backgroundStyles} from '../../Components/AppStyle';
 import colours from '../../Components/ColourPallet';
-import RatingIndicator from '../../Components/barIndicator';
+import RatingIndicator from '../../Components/MainBarIndicator';
 import ReviewCard from '../../Components/Reviewcard';
 import AddReviewForm from '../../Components/AddReviewForm';
 
@@ -41,60 +41,42 @@ const App = ({navigation, route}) => {
       />
       <View
         style={{
-          padding: 10,
+          padding: 6,
           flexDirection: 'row',
-          borderBottomColor: 'white',
-          borderBottomWidth: 3,
-          justifyContent: 'center',
+          backgroundColor: colours.primary,
+          justifyContent: 'space-around',
         }}
       >
-        <Title style={styles.titleText}>{locationDetails.cafeName}</Title>
-        <Rating
-          imageSize={30}
-          startingValue={locationDetails.starRating}
-          type="custom"
-          ratingBackgroundColor="white"
-          readonly
-          ratingColor={colours.secondary}
-          tintColor={colours.primary}
-          showRating
-          ratingTextColor="black"
+        <Title
           style={{
             flex: 1,
-            marginTop: 12,
+            alignSelf: 'center',
+            color: 'white',
+            fontSize: 25,
           }}
-        />
-      </View>
-      {/* display all the different ratings */}
-      <View>
-        <RatingIndicator
-          fullSize={250}
-          rating={locationDetails.starRating}
-          label="Overall Rating"
-        />
-        <RatingIndicator
-          fullSize={250}
-          rating={locationDetails.priceRating}
-          label="Price Rating"
-        />
-        <RatingIndicator
-          fullSize={250}
-          rating={locationDetails.qualityRating}
-          label="Quality Rating"
-        />
-        <RatingIndicator
-          fullSize={250}
-          rating={locationDetails.cleanlinessRating}
-          label="Cleanliness Rating"
+        >
+          {locationDetails.cafeName}
+        </Title>
+        <Rating
+          imageSize={15}
+          startingValue={locationDetails.starRating}
+          type="custom"
+          ratingBackgroundColor={colours.background}
+          readonly
+          ratingColor={colours.accent}
+          tintColor={colours.primary}
+          showRating
+          ratingTextColor="white"
+          style={{
+            flex: 1,
+          }}
         />
       </View>
 
       <View style={{flex: 1}}>
         <View style={{flexDirection: 'row'}}>
-          <Title style={{flex: 1}}>Review</Title>
-
           <Button
-            style={{flex: 1}}
+            style={{flex: 1, margin: 6, height: 35}}
             mode="contained"
             onPress={() => {
               showModal();

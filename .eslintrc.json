@@ -6,19 +6,11 @@
   "parser": "babel-eslint",
   "rules": {
     "react/prop-types": 0,
-
+    "no-console": "off",
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [".js", ".jsx"]
-      }
-    ],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "jsxBracketSameLine": false
       }
     ]
   },

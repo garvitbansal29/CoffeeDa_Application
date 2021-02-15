@@ -1,4 +1,5 @@
 import {getToken} from './SessionToken';
+import {getUserID} from './AsyncData';
 
 const requestLogin = async (props) => {
   const {email, password} = props;
@@ -150,6 +151,18 @@ const getFavouriteLocations = async (props) => {
   }
 };
 
+const getUserLikedReviews = async () => {
+  const userID = await getUserID();
+
+  try {
+    const response = await getUserDetails({userID});
+    const likedReviews = response.liked_reviews;
+    return likedReviews;
+  } catch (error) {
+    console.log(`Error: unable to get favourite location ${error}`);
+    return [];
+  }
+};
 const getFavouriteLocationID = async (props) => {
   const {userID} = props;
   try {
@@ -161,6 +174,24 @@ const getFavouriteLocationID = async (props) => {
     });
     console.log(`retrieved location ID's successfully`);
     return favLocationID;
+  } catch (error) {
+    console.log(`Error: unable to get favourite location ID's ${error}`);
+    return [];
+  }
+};
+
+const getLikedReviewID = async () => {
+  const userID = await getUserID();
+  try {
+    const response = await getUserLikedReviews({userID});
+    const reviewID = response.map((item) => {
+      return {
+        likedReviewID: item.review.review_id,
+      };
+    });
+
+    console.log(`retrieved location ID's successfully`);
+    return reviewID;
   } catch (error) {
     console.log(`Error: unable to get favourite location ID's ${error}`);
     return [];
@@ -219,6 +250,120 @@ const deleteFavourite = async (props) => {
   }
 };
 
+const getReviewPhoto = async (props) => {
+  const sessionToken = await getToken();
+  const {locationID, reviewID} = props;
+  const settings = {
+    headers: {
+      'x-authorization': sessionToken,
+      response: 'image/jpeg',
+      // 'Content-Type': 'image/png',
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
+      settings,
+    );
+    const {status} = response;
+    if (status === 200) {
+      console.log(`Successfully retrieved image for the review: ${response}`);
+      return response;
+    }
+    console.log('No image found');
+    return 'Unsuccessful';
+  } catch (error) {
+    console.log('Unsuccessful : review Image');
+    return 'Unsuccessful';
+  }
+};
+
+const likeReview = async (props) => {
+  const sessionToken = await getToken();
+  const {locationID, reviewID} = props;
+  const settings = {
+    method: 'POST',
+    headers: {
+      'x-authorization': sessionToken,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/like`,
+      settings,
+    );
+    const {status} = response;
+
+    if (status === 200) {
+      console.log(`Like Review Successful: ${status} `);
+      return true;
+    }
+
+    console.log(
+      `Like Review Unsuccessful: ${status} + :: ${JSON.stringify(response)}`,
+    );
+    return false;
+  } catch (error) {
+    console.log(`Like Review Unsuccessful: ${error}`);
+    return false;
+  }
+};
+
+const unLikeReview = async (props) => {
+  const sessionToken = await getToken();
+  const {locationID, reviewID} = props;
+  const settings = {
+    method: 'DELETE',
+    headers: {
+      'x-authorization': sessionToken,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/like`,
+      settings,
+    );
+    const {status} = response;
+
+    if (status === 200) {
+      console.log(`Un-Like Review Successful: ${status}`);
+      return true;
+    }
+
+    console.log(`Un-Like Review Unsuccessful: ${status}`);
+    return false;
+  } catch (error) {
+    console.log(`Un-Like Review Unsuccessful: ${error}`);
+    return false;
+  }
+};
+
+const getReviewData = async (props) => {
+  const searchValue = '';
+  const {locationID, reviewID} = props;
+
+  try {
+    const response = await getLocationData({searchValue});
+    const locations = await response.responseJson.find(
+      (item) => item.location_id === 2,
+    );
+
+    const locationReviews = locations.location_reviews;
+
+    const review = await locationReviews.find((item) => item.review_id === 4);
+
+    console.log(
+      `Successfully retrieved review data for you  ${JSON.stringify(review)}`,
+    );
+  } catch (error) {
+    console.log(`Error: unable to get any location DATA :  ${error}`);
+    // return [];
+  }
+};
+
 export {
   requestLogin,
   getLocationData,
@@ -229,4 +374,10 @@ export {
   getFavouriteLocationID,
   updateFavourite,
   deleteFavourite,
+  getReviewPhoto,
+  getLikedReviewID,
+  getUserLikedReviews,
+  likeReview,
+  unLikeReview,
+  getReviewData,
 };

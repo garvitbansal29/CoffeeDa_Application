@@ -1,6 +1,6 @@
 const defaultColourPallet = {
-  primary: '#62959c',
-  accent: '#00303f',
+  accent: '#62959c',
+  primary: '#00303f',
 
   surface: '#cdac81',
 

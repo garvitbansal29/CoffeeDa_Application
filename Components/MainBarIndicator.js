@@ -1,23 +1,24 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Subheading} from 'react-native-paper';
+import Colours from './ColourPallet';
 
 const App = (props) => {
-  const {rating, fullSize, label} = props;
+  const {rating, label} = props;
 
   const styles = StyleSheet.create({
     lineBarBackground: {
-      backgroundColor: '#b0b0b0',
-      height: 5,
-      width: fullSize,
+      backgroundColor: Colours.background,
+      height: 3,
+      width: 200,
       borderBottomEndRadius: 10,
       borderTopEndRadius: 10,
-      marginVertical: 12,
+      alignSelf: 'center',
     },
     lineBar: {
-      backgroundColor: 'black',
-      height: 5,
-      width: (fullSize / 5) * rating,
+      backgroundColor: Colours.accent,
+      height: 3,
+      width: (200 / 5) * rating,
       borderBottomEndRadius: 10,
       borderTopEndRadius: 10,
     },
@@ -30,7 +31,7 @@ const App = (props) => {
         marginHorizontal: 6,
       }}
     >
-      <Text>{label}</Text>
+      <Subheading style={{color: 'black', fontSize: 14}}>{label}</Subheading>
       <View style={styles.lineBarBackground}>
         <View style={styles.lineBar} />
       </View>

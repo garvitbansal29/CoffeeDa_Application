@@ -4,13 +4,13 @@ import {Card, Button, IconButton} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 
+import RatingIndicator from './MainBarIndicator';
 import colors from './ColourPallet';
 import {
   getFavouriteLocationID,
   updateFavourite,
   deleteFavourite,
 } from './apiUtils';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const LocationDisplay = (props) => {
   const navigation = useNavigation();
@@ -24,6 +24,9 @@ const LocationDisplay = (props) => {
     latitude: itemDetails.latitude,
     longitute: itemDetails.longitute,
     starRating: itemDetails.avg_overall_rating,
+    priceRating: itemDetails.avg_price_rating,
+    qualityRating: itemDetails.avg_quality_rating,
+    cleanlinessRating: itemDetails.avg_clenliness_rating,
   };
   const [isFavourite, setIsFavourite] = useState(false);
 
@@ -74,10 +77,26 @@ const LocationDisplay = (props) => {
         />
       </View>
 
-      <Card.Cover source={{uri: location.image}} />
+      <Card.Cover style={{marginBottom: 12}} source={{uri: location.image}} />
+      <Card.Content>
+        <View>
+          <RatingIndicator
+            rating={location.starRating}
+            label="Overall Rating"
+          />
+          <RatingIndicator rating={location.priceRating} label="Price Rating" />
+          <RatingIndicator
+            rating={location.qualityRating}
+            label="Quality Rating"
+          />
+          <RatingIndicator
+            rating={location.cleanlinessRating}
+            label="Cleanliness Rating"
+          />
+        </View>
+      </Card.Content>
       <Card.Actions style={{justifyContent: 'flex-end'}}>
         <IconButton
-          // icon="camera"
           icon={isFavourite ? 'heart' : 'heart-outline'}
           color="#eb2d4f"
           size={30}

@@ -37,6 +37,7 @@ const getUserID = async () => {
   try {
     const value = await AsyncStorage.getItem('@user_id');
     if (value !== null) {
+      console.log('Get User ID Successful');
       return value;
     }
   } catch (e) {

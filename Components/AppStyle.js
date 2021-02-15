@@ -48,7 +48,7 @@ const backgroundStyles = StyleSheet.create({
     alignItems: 'center',
   },
   imgHeaderContainer: {
-    paddingTop: 150,
+    paddingTop: 125,
   },
 });
 
