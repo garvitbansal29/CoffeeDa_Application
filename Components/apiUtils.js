@@ -18,11 +18,23 @@ const requestLogin = async (props) => {
       'http://10.0.2.2:3333/api/1.0.0/user/login',
       settings,
     );
-    const responseJson = await response.json();
-    return responseJson;
+
+    const {status} = response;
+
+    if (status === 200) {
+      console.log('Login Request: Successful');
+      const responseJson = await response.json();
+      return responseJson;
+    }
+    if (status === 400) {
+      console.log('Login Request: Invalid email or password');
+      return 'invalid';
+    }
+    console.log(`Login Request: Unsuccessful -> status : ${status}`);
+    return 'unsuccessful';
   } catch (error) {
-    console.log(`Error: Loggin in: ${error}`);
-    return 'Unsuccessful';
+    console.log(`Login Request: Unsuccessful -> status : ${error}`);
+    return 'unsuccessful';
   }
 };
 

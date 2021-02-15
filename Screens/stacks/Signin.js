@@ -6,9 +6,11 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import {setToken, setUserID} from '../../Components/AsyncData';
 import {styles, backgroundStyles} from '../../Components/AppStyle';
 import {requestLogin} from '../../Components/apiUtils';
+import Colours from '../../Components/ColourPallet';
 
 const App = ({navigation}) => {
-  const [isLoading, setLoading] = useState(false);
+  const [invalidReq, setInvalidReq] = useState(false);
+  const [unsuccessfulReq, setUnsuccessfulReq] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [loginEmail, setLoginEmail] = useState('g@email.com');
   const [loginPassword, setLoginPass] = useState('password');
@@ -19,18 +21,38 @@ const App = ({navigation}) => {
       email: loginEmail,
       password: loginPassword,
     });
-    setSpinner(false);
 
-    console.log(response);
-    if (response !== 'Unsuccessful') {
+    if (response === 'invalid') {
+      setInvalidReq(true);
+    } else if (response === 'unsuccessful ') {
+      setUnsuccessfulReq(true);
+    } else {
+      setInvalidReq(false);
       setToken(response.token);
       setUserID(response.id.toString());
       navigation.navigate('home');
     }
+
+    setSpinner(false);
+  };
+
+  const InvalidLoginText = () => {
+    return (
+      <Text style={{alignSelf: 'center', color: Colours.error}}>
+        Invalid Email or password
+      </Text>
+    );
+  };
+
+  const UnsuccessfullLoginText = () => {
+    return (
+      <Text style={{alignSelf: 'center', color: Colours.error}}>
+        Unexpected Error:
+      </Text>
+    );
   };
 
   return (
-    // <ScrollView contentContainerStyle={{flexGrow: 1}}>
     <View style={backgroundStyles.containerWithAlignAndJustify}>
       <Spinner
         visible={spinner}
@@ -39,6 +61,8 @@ const App = ({navigation}) => {
       />
       <View style={styles.middle}>
         <Text style={styles.titleText}>Sign In</Text>
+        {invalidReq ? <InvalidLoginText /> : <View />}
+        {unsuccessfulReq ? <UnsuccessfullLoginText /> : <View />}
         <TextInput
           style={styles.fullSizeTextInput}
           autoCompleteType="email"
@@ -74,7 +98,6 @@ const App = ({navigation}) => {
         </Button>
       </View>
     </View>
-    // </ScrollView>
   );
 };
 
