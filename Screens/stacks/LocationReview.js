@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
-import {Image, View, FlatList, ScrollView} from 'react-native';
-import {Text, Title, Button, Modal, Portal, Provider} from 'react-native-paper';
+import React, {useState, useEffect} from 'react';
+import {Image, View, FlatList} from 'react-native';
+import {Title, Button, Modal, Portal} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 
-import {styles, backgroundStyles} from '../../Components/AppStyle';
+import {backgroundStyles} from '../../Components/AppStyle';
 import colours from '../../Components/ColourPallet';
-import RatingIndicator from '../../Components/MainBarIndicator';
 import ReviewCard from '../../Components/Reviewcard';
 import AddReviewForm from '../../Components/AddReviewForm';
 

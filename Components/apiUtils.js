@@ -1,7 +1,8 @@
 import {getToken} from './SessionToken';
 import {getUserID} from './AsyncData';
 
-const requestLogin = async (props) => {
+// Refectored and working
+export const requestLogin = async (props) => {
   const {email, password} = props;
 
   const settings = {
@@ -38,24 +39,86 @@ const requestLogin = async (props) => {
   }
 };
 
-const getLocationData = async (props) => {
+// Refectored and working
+export const getLocationData = async (props) => {
   const sessionToken = await getToken();
 
-  return fetch(
+  const settings = {
+    method: 'GET',
+    headers: {'x-authorization': sessionToken},
+  };
+
+  const response = await fetch(
     `http://10.0.2.2:3333/api/1.0.0/find?q=${props.searchValue}&overall_rating=${props.overallRating}&price_rating=${props.priceRating}&quality_rating=${props.qualityRating}&clenliness_rating=${props.cleanlinessRating}&search_in=${props.searchIn}&limit=${props.resultLimit}&offset=${props.resultOffset}`,
-    {
-      method: 'GET',
-      headers: {'x-authorization': sessionToken},
+    settings,
+  );
+
+  const {status} = response;
+
+  if (status === 200) {
+    console.log('Get All Locations Data: Successful');
+    const responseJson = await response.json();
+    return responseJson;
+  }
+
+  console.log('Get All Locations Data: Unsuccessful');
+  return 'unsuccessful';
+};
+
+// Refactored
+export const getReviewPhoto = async (props) => {
+  const sessionToken = await getToken();
+  const {locationID, reviewID} = props;
+  const settings = {
+    headers: {
+      'x-authorization': sessionToken,
     },
-  )
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log('request location data successful ');
-      return {responseJson};
-    })
-    .catch((error) => {
-      console.log(`Error: ${error}`);
-    });
+  };
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
+      settings,
+    );
+    const {status, url} = response;
+    if (status === 200) {
+      console.log('GET Review Image: Successful');
+      return url;
+    }
+    console.log(
+      `GET Review Image: No image found for location ${locationID} and ${reviewID}`,
+    );
+
+    return '';
+  } catch (error) {
+    console.log('GET Review Image: Error');
+    return '';
+  }
+};
+
+export const getLocationData2 = async (props) => {
+  const sessionToken = await getToken();
+
+  const settings = {
+    method: 'GET',
+    headers: {'x-authorization': sessionToken},
+  };
+
+  const response = await fetch(
+    `http://10.0.2.2:3333/api/1.0.0/find?q=${props.searchValue}&overall_rating=${props.overallRating}&price_rating=${props.priceRating}&quality_rating=${props.qualityRating}&clenliness_rating=${props.cleanlinessRating}&search_in=${props.searchIn}&limit=${props.resultLimit}&offset=${props.resultOffset}`,
+    settings,
+  );
+
+  const {status} = response;
+
+  if (status === 200) {
+    console.log('Get All Locations Data: Successful');
+    const responseJson = await response.json();
+    const responsejsonjson = JSON.stringify(responseJson);
+    return responsejsonjson;
+  }
+
+  console.log('Get All Locations Data: Unsuccessful');
+  return 'unsuccessful';
 };
 
 const addReview = async (props) => {
@@ -262,35 +325,6 @@ const deleteFavourite = async (props) => {
   }
 };
 
-const getReviewPhoto = async (props) => {
-  const sessionToken = await getToken();
-  const {locationID, reviewID} = props;
-  const settings = {
-    headers: {
-      'x-authorization': sessionToken,
-      response: 'image/jpeg',
-      // 'Content-Type': 'image/png',
-    },
-  };
-
-  try {
-    const response = await fetch(
-      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
-      settings,
-    );
-    const {status} = response;
-    if (status === 200) {
-      console.log(`Successfully retrieved image for the review: ${response}`);
-      return response;
-    }
-    console.log('No image found');
-    return 'Unsuccessful';
-  } catch (error) {
-    console.log('Unsuccessful : review Image');
-    return 'Unsuccessful';
-  }
-};
-
 const likeReview = async (props) => {
   const sessionToken = await getToken();
   const {locationID, reviewID} = props;
@@ -359,26 +393,26 @@ const getReviewData = async (props) => {
 
   try {
     const response = await getLocationData({searchValue});
-    const locations = await response.responseJson.find(
-      (item) => item.location_id === 2,
+
+    const locations = await response.find(
+      (item) => item.location_id === locationID,
     );
 
     const locationReviews = locations.location_reviews;
 
-    const review = await locationReviews.find((item) => item.review_id === 4);
-
-    console.log(
-      `Successfully retrieved review data for you  ${JSON.stringify(review)}`,
+    const review = await locationReviews.find(
+      (item) => item.review_id === reviewID,
     );
+
+    console.log(`Get Review Data: Successful `);
+    return review;
   } catch (error) {
-    console.log(`Error: unable to get any location DATA :  ${error}`);
-    // return [];
+    console.log(`Get Review Data: Unsuccessful:   ${error}`);
+    return [];
   }
 };
 
 export {
-  requestLogin,
-  getLocationData,
   addReview,
   getUserDetails,
   updateUserDetails,
@@ -386,7 +420,6 @@ export {
   getFavouriteLocationID,
   updateFavourite,
   deleteFavourite,
-  getReviewPhoto,
   getLikedReviewID,
   getUserLikedReviews,
   likeReview,

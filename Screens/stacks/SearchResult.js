@@ -39,7 +39,7 @@ const App = () => {
       resultLimit,
       resultOffset,
     });
-    const sortByStars = await response.responseJson.slice(0);
+    const sortByStars = await response.slice(0);
     sortByStars.sort((a, b) => {
       return b.avg_overall_rating - a.avg_overall_rating;
     });
