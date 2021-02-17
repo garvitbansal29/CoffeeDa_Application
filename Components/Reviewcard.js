@@ -28,7 +28,7 @@ import {
 const App = (props) => {
   const [spinner, setSpinner] = useState(false);
 
-  const {cardDetails, locationID, userReviewIDs} = props;
+  const {cardDetails, locationID, userReviewIDs, userLikedReviewID} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [revImage, setImage] = useState();
@@ -90,15 +90,13 @@ const App = (props) => {
   }
 
   async function checkIfUserLiked() {
-    const likedList = await getLikedReviewID();
-    setLiked(likedList.some((item) => item.likedReviewID === review.reviewID));
+    // const likedList = await getLikedReviewID();
+    setLiked(
+      userLikedReviewID.some((item) => item.likedReviewID === review.reviewID),
+    );
   }
 
   async function checkIfIsUserReview() {
-    console.log(
-      `this are the review ID's for the user ${JSON.stringify(userReviewIDs)}`,
-    );
-    console.log(`This is the current Rev ID = ${review.reviewID}`);
     setIsUserReview(
       userReviewIDs.some((item) => item.reviewID === review.reviewID),
     );

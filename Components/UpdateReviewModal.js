@@ -26,9 +26,10 @@ const App = ({hideModal, visibility, review}) => {
       reviewID: review.reviewID,
     });
     if (response) {
-      Alert.alert('All is well');
+      Alert.alert('Review Updated Successfully');
+      hideModal();
     } else {
-      console.log('NOENOENONEONOENONEO');
+      Alert.alert('Unable to Update Review');
     }
   };
 

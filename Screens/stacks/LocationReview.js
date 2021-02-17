@@ -9,6 +9,7 @@ import colours from '../../Components/ColourPallet';
 import ReviewCard from '../../Components/Reviewcard';
 import AddReviewForm from '../../Components/AddReviewForm';
 import {
+  getLikedReviewID,
   getSingleLocationData,
   getUserReviewID,
 } from '../../Components/apiUtils';
@@ -21,6 +22,7 @@ const App = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cafe, setCafe] = useState({});
   const [userReviewIDs, setUserReviewIDs] = useState([]);
+  const [userLikedRevID, setUserLikedRevID] = useState([]);
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -33,6 +35,7 @@ const App = ({route}) => {
   async function getLocationData() {
     setSpinner(true);
     setUserReviewIDs(await getUserReviewID());
+    setUserLikedRevID(await getLikedReviewID());
     setCafe(await getSingleLocationData({locationID}));
     setSpinner(false);
   }
@@ -41,9 +44,6 @@ const App = ({route}) => {
     getLocationData();
   }, []);
 
-  // useEffect(() => {
-  //   setSpinner(false);
-  // }, []);
   return (
     <View style={backgroundStyles.container}>
       <Spinner
@@ -109,6 +109,7 @@ const App = ({route}) => {
                 cardDetails={item}
                 locationID={locationID}
                 userReviewIDs={userReviewIDs}
+                userLikedReviewID={userLikedRevID}
               />
             )}
             keyExtractor={(item) => item.review_id.toString()}
