@@ -3,6 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {Card, Button, IconButton} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
+import {getDistance} from 'geolib';
 
 import RatingIndicator from './MainBarIndicator';
 import colors from './ColourPallet';
@@ -14,7 +15,9 @@ import {
 
 const LocationDisplay = (props) => {
   const navigation = useNavigation();
-  const {itemDetails} = props;
+  const {itemDetails, currLongitude, currLatitude} = props;
+  const [distance, setDistance] = useState(0);
+  const [isFavourite, setIsFavourite] = useState(false);
 
   const location = {
     cafeID: itemDetails.location_id,
@@ -22,13 +25,12 @@ const LocationDisplay = (props) => {
     town: itemDetails.location_town,
     image: itemDetails.photo_path,
     latitude: itemDetails.latitude,
-    longitute: itemDetails.longitute,
+    longitute: itemDetails.longitude,
     starRating: itemDetails.avg_overall_rating,
     priceRating: itemDetails.avg_price_rating,
     qualityRating: itemDetails.avg_quality_rating,
     cleanlinessRating: itemDetails.avg_clenliness_rating,
   };
-  const [isFavourite, setIsFavourite] = useState(false);
 
   const checkIsFavourite = async () => {
     const favouritesList = await getFavouriteLocationID({userID: 9});
@@ -49,20 +51,41 @@ const LocationDisplay = (props) => {
     }
   };
 
+  function metersToMiles(meters) {
+    return meters / 1609.3440057765;
+  }
+
+  const calculateDistance = async () => {
+    const dist = getDistance(
+      {latitude: currLatitude, longitude: currLongitude},
+      {latitude: location.latitude, longitude: location.longitute},
+    );
+    const distInMiles = metersToMiles(dist);
+    const milesRound = distInMiles.toFixed(1);
+    setDistance(milesRound);
+  };
+
+  useEffect(() => {
+    calculateDistance();
+  });
   useEffect(() => {
     checkIsFavourite();
   }, [isFavourite]);
+
   return (
-    // <Surface style={styles.surface}>
     <Card
-      onPress={() => navigation.navigate('LocationReviews', {props})}
+      onPress={() =>
+        navigation.navigate('LocationReviews', {
+          locationID: location.cafeID,
+        })
+      }
       elevation={10}
       style={{margin: 10}}
     >
       <View style={{flexDirection: 'row'}}>
         <Card.Title
           title={location.cafeName}
-          subtitle={location.town}
+          subtitle={`${location.town} (${distance} mi)`}
           style={{flex: 2}}
         />
         <Rating
@@ -104,7 +127,6 @@ const LocationDisplay = (props) => {
         />
       </Card.Actions>
     </Card>
-    // </Surface>
   );
 };
 

@@ -10,7 +10,7 @@ const defaultColourPallet = {
   error: '#B00020',
   text: 'black',
   // disabled: color(black).alpha(0.26).rgb().string(),
-  placeholder: '#a1775f',
+  placeholder: '#6b4631',
   // backdrop: color(black).alpha(0.5).rgb().string(),
   // notification: '#F50057',
 };

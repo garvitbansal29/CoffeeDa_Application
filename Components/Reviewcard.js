@@ -2,7 +2,17 @@ import React, {useState, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 
 import {View} from 'react-native';
-import {Surface, Button, Paragraph, Card, Title} from 'react-native-paper';
+import {
+  Surface,
+  Button,
+  Paragraph,
+  Card,
+  Title,
+  Modal,
+  Text,
+  TextInput,
+  Portal,
+} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import RatingIndicator from './CommentCardIndicators';
@@ -12,27 +22,32 @@ import {
   getLikedReviewID,
   likeReview,
   unLikeReview,
-  getReviewData,
 } from './apiUtils';
 
 const App = (props) => {
   const [spinner, setSpinner] = useState(false);
 
-  const {cardDetails} = props;
-
+  const {cardDetails, locationID, userReviewIDs} = props;
+  const [modalVisible, setModalVisible] = useState(false);
   const [revImage, setImage] = useState();
   const [isImage, setIsImage] = useState(false);
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState(cardDetails.likes);
   const [isLiked, setLiked] = useState(false);
+  const [isUserReview, setIsUserReview] = useState(false);
+
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => {
+    console.log('BROOOOOO>>>>>>>');
+    setModalVisible(false);
+  };
 
   const review = {
     reviewID: cardDetails.review_id,
-    locationID: cardDetails.review_location_id,
-    userId: cardDetails.review_user_id,
-    overallRating: cardDetails.review_overallrating,
-    priceRating: cardDetails.review_pricerating,
-    qualityRating: cardDetails.review_qualityrating,
-    cleanlinessRating: cardDetails.review_clenlinessrating,
+    locationID,
+    overallRating: cardDetails.overall_rating,
+    priceRating: cardDetails.price_rating,
+    qualityRating: cardDetails.quality_rating,
+    cleanlinessRating: cardDetails.clenliness_rating,
     reviewBody: cardDetails.review_body,
     likes: cardDetails.likes,
   };
@@ -67,41 +82,63 @@ const App = (props) => {
     });
     if (response === '') setIsImage(false);
     else {
-      console.log('this is the review image url >>>>>>>>' + response);
       setIsImage(true);
       setImage(response);
-      // const imgUrl = await URL.createObjectURL(image);
-      // // setImage(image);
     }
   }
 
-  async function checkUserLiked() {
+  async function checkIfUserLiked() {
     const likedList = await getLikedReviewID();
-    console.log(likedList);
     setLiked(likedList.some((item) => item.likedReviewID === review.reviewID));
   }
 
-  const updateReviewLikes = async () => {
-    const rev = await getReviewData({
-      locationID: review.locationID,
-      reviewID: review.reviewID,
-    });
-    setLikes(rev.likes);
-  };
+  async function checkIfIsUserReview() {
+    console.log(
+      `this are the review ID's for the user ${JSON.stringify(userReviewIDs)}`,
+    );
+    console.log(`This is the current Rev ID = ${review.reviewID}`);
+    setIsUserReview(
+      userReviewIDs.some((item) => item.reviewID === review.reviewID),
+    );
+  }
+
   async function setAllCardData() {
     setSpinner(true);
-    await updateReviewLikes();
+    checkIfIsUserReview();
     await getReviewImage();
-    await checkUserLiked();
+    await checkIfUserLiked();
+    setLikes(cardDetails.likes);
+
     setSpinner(false);
+  }
+
+  function openUpdateReviewModal() {
+    showModal();
   }
 
   useEffect(() => {
     setAllCardData();
   }, []);
 
+  const containerStyle = {backgroundColor: 'white', padding: 20};
+
   return (
     <View>
+      <Portal>
+        <Modal
+          contentContainerStyle={containerStyle}
+          visible={modalVisible}
+          transparent
+          dismissable
+          onDismiss={() => {
+            hideModal();
+          }}
+        >
+          <View style={{alignItems: 'center'}}>
+            <Button>search</Button>
+          </View>
+        </Modal>
+      </Portal>
       <Spinner
         visible={spinner}
         textContent="Loading..."
@@ -112,9 +149,16 @@ const App = (props) => {
         style={{margin: 6, backgroundColor: colours.onBackground}}
       >
         <Card.Content>
-          <Title>
-            User ID : {review.userId} AND Review ID: {review.reviewID}
-          </Title>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Title>Review ID: {review.reviewID}</Title>
+            {isUserReview ? (
+              <Button mode="contained" onPress={() => openUpdateReviewModal()}>
+                Edit
+              </Button>
+            ) : (
+              <View />
+            )}
+          </View>
           <Paragraph style={{fontSize: 18}}>{review.reviewBody}</Paragraph>
         </Card.Content>
 

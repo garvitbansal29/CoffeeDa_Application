@@ -10,10 +10,11 @@ import {} from 'react-native';
 import SignIn from './Screens/stacks/Signin';
 import SignUp from './Screens/stacks/Signup';
 import Search from './Screens/tabs/Search';
-import Favourite from './Screens/tabs/Favourite';
+import favouriteLocs from './Screens/tabs/Favourites';
 import Settings from './Screens/tabs/Settings';
 import SearchResult from './Screens/stacks/SearchResult';
 import LocationReviews from './Screens/stacks/LocationReview';
+import MapResultsScreen from './Screens/stacks/MapsDisplay';
 import Colours from './Components/ColourPallet';
 
 const Stack = createStackNavigator();
@@ -29,10 +30,12 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="SearchResult" component={SearchResult} />
+        <Stack.Screen name="MapResults" component={MapResultsScreen} />
         <Stack.Screen name="LocationReviews" component={LocationReviews} />
       </Stack.Navigator>
     );
   }
+
   function Home() {
     return (
       <Tab.Navigator barStyle={{backgroundColor: Colours.accent}}>
@@ -51,14 +54,10 @@ const App = () => {
         />
         <Tab.Screen
           name="Favourite"
-          component={Favourite}
+          component={favouriteLocs}
           options={{
             tabBarIcon: ({color}) => (
-              <MaterialCommunityIcons
-                name="cards-heart"
-                color={color}
-                size={26}
-              />
+              <MaterialCommunityIcons name="heart" color={color} size={26} />
             ),
           }}
         />

@@ -3,14 +3,17 @@ import {View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {Button, TextInput, Searchbar, Modal, Text} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
-
 import Slider from '@react-native-community/slider';
+import Geolocation from 'react-native-geolocation-service';
+import GetLocationPermission from '../../Components/PermissionManager';
+
 import {getLocationData as apiUtils} from '../../Components/apiUtils';
 import {styles} from '../../Components/AppStyle';
 import LocationDisplay from '../../Components/LocationDetailCard';
 import colours from '../../Components/ColourPallet';
+import Global from '../../Components/Global';
 
-const App = () => {
+const App = ({navigation}) => {
   const [spinner, setSpinner] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -25,11 +28,15 @@ const App = () => {
   const [resultLimit, setResultLimit] = useState('');
   const [resultOffset, setResultOffset] = useState('');
 
+  const [currLongitude, setLongitute] = useState(0);
+  const [currLatitude, setLatitude] = useState(0);
+
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
   const getLocationData = async () => {
-    const response = await apiUtils({
+    setSpinner(true);
+    const allLocations = await apiUtils({
       searchValue: searchBarValue,
       overallRating,
       priceRating,
@@ -39,24 +46,65 @@ const App = () => {
       resultLimit,
       resultOffset,
     });
-    const sortByStars = await response.slice(0);
-    sortByStars.sort((a, b) => {
+    // const sortByStars = await allLocations.slice(0);
+    const sortByStars = allLocations.sort((a, b) => {
       return b.avg_overall_rating - a.avg_overall_rating;
     });
     setLocationsData(sortByStars);
+    setSpinner(false);
   };
+
   const handleModalClick = () => {
     getLocationData();
     hideModal();
   };
 
   const containerStyle = {backgroundColor: 'white', padding: 20};
+
+  const openInMaps = () => {
+    navigation.navigate('MapResults', {locationsData});
+  };
+
+  const getCurrentCoordinates = async () => {
+    if (!Global.locationPermission) {
+      console.log('asking for permission now');
+      Global.locationPermission = await GetLocationPermission();
+    }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitute(position.coords.longitude);
+        console.log(
+          `this is the current coordinates : ${JSON.stringify(position)}`,
+        );
+      },
+      (error) => {
+        console.log(`Error getting current coordinates: ${error}`);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+      },
+    );
+  };
+
   useEffect(() => {
     getLocationData();
   }, [searchBarValue]);
 
+  useEffect(() => {
+    getCurrentCoordinates();
+  });
+
   return (
     <View style={{backgroundColor: colours.background}}>
+      <Spinner
+        visible={spinner}
+        textContent="Loading..."
+        textStyle={{color: '#FFF'}}
+      />
       <Searchbar
         theme={{placeholder: 'black'}}
         placeholder="Search"
@@ -79,10 +127,24 @@ const App = () => {
         >
           Search
         </Button>
+        <Button
+          theme={{roundness: 0}}
+          style={{flex: 1}}
+          mode="contained"
+          onPress={() => openInMaps()}
+        >
+          Open Map
+        </Button>
       </View>
       <FlatList
         data={locationsData}
-        renderItem={({item}) => <LocationDisplay itemDetails={item} />}
+        renderItem={({item}) => (
+          <LocationDisplay
+            itemDetails={item}
+            currLatitude={currLatitude}
+            currLongitude={currLongitude}
+          />
+        )}
         keyExtractor={(item) => item.location_id.toString()}
       />
       <Modal

@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getToken} from './SessionToken';
-import {getUserID} from './AsyncData';
+import {getUserID, removeUserID, removeUsertoken} from './AsyncData';
 
 // Refectored and working
 export const requestLogin = async (props) => {
@@ -39,6 +40,33 @@ export const requestLogin = async (props) => {
   }
 };
 
+export const requestLogout = async () => {
+  const sessionToken = await getToken();
+  const settings = {
+    method: 'POST',
+    headers: {'x-authorization': sessionToken},
+  };
+  try {
+    const response = await fetch(
+      'http://10.0.2.2:3333/api/1.0.0/user/logout',
+      settings,
+    );
+    const {status} = response;
+    if (status === 200) {
+      console.log('LOGOUT: Successful');
+      await removeUserID();
+      await removeUserID();
+      return true;
+    }
+    console.log('LOGOUT: Successful');
+
+    return false;
+  } catch (error) {
+    console.log(`LOGOUT: Unsuccessful: ${error}`);
+    return false;
+  }
+};
+
 // Refectored and working
 export const getLocationData = async (props) => {
   const sessionToken = await getToken();
@@ -65,7 +93,7 @@ export const getLocationData = async (props) => {
   return 'unsuccessful';
 };
 
-// Refactored
+// Refactored and working
 export const getReviewPhoto = async (props) => {
   const sessionToken = await getToken();
   const {locationID, reviewID} = props;
@@ -95,30 +123,36 @@ export const getReviewPhoto = async (props) => {
   }
 };
 
-export const getLocationData2 = async (props) => {
+// Refactored and Working
+export const getSingleLocationData = async (props) => {
   const sessionToken = await getToken();
+  const {locationID} = props;
 
   const settings = {
-    method: 'GET',
-    headers: {'x-authorization': sessionToken},
+    headers: {
+      'x-authorization': sessionToken,
+    },
   };
 
-  const response = await fetch(
-    `http://10.0.2.2:3333/api/1.0.0/find?q=${props.searchValue}&overall_rating=${props.overallRating}&price_rating=${props.priceRating}&quality_rating=${props.qualityRating}&clenliness_rating=${props.cleanlinessRating}&search_in=${props.searchIn}&limit=${props.resultLimit}&offset=${props.resultOffset}`,
-    settings,
-  );
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}`,
+      settings,
+    );
+    const {status} = response;
 
-  const {status} = response;
+    if (status === 200) {
+      console.log('GET single location data: SUCCESSFUL');
+      const responseJson = await response.json();
+      return responseJson;
+    }
+    console.log('GET single location data: SUCCESSFUL');
 
-  if (status === 200) {
-    console.log('Get All Locations Data: Successful');
-    const responseJson = await response.json();
-    const responsejsonjson = JSON.stringify(responseJson);
-    return responsejsonjson;
+    return '';
+  } catch (error) {
+    console.log(`GET single location data: SUCCESSFUL: ${error}`);
+    return '';
   }
-
-  console.log('Get All Locations Data: Unsuccessful');
-  return 'unsuccessful';
 };
 
 const addReview = async (props) => {
@@ -162,8 +196,7 @@ const addReview = async (props) => {
 
 const getUserDetails = async (props) => {
   const sessionToken = await getToken();
-
-  const {userID} = props;
+  const userID = await getUserID();
   try {
     const response = await fetch(
       `http://10.0.2.2:3333/api/1.0.0/user/${userID}`,
@@ -273,6 +306,33 @@ const getLikedReviewID = async () => {
   }
 };
 
+export const getUserReviews = async () => {
+  try {
+    const response = await getUserDetails();
+    const {reviews} = response;
+    console.log(`Get User Reviews: Successful`);
+    return reviews;
+  } catch (error) {
+    console.log(`Get User Revies: Unsuccessful: ${error}`);
+    return [];
+  }
+};
+
+export const getUserReviewID = async () => {
+  try {
+    const response = await getUserReviews();
+    const userReviewIDs = response.map((item) => {
+      return {
+        reviewID: item.review.review_id,
+      };
+    });
+    console.log(`Get User Review ID's: Successful`);
+    return userReviewIDs;
+  } catch (error) {
+    console.log(`Get User Review ID's: Unsuccessful ${error}`);
+    return [];
+  }
+};
 const updateFavourite = async (props) => {
   const {locationID} = props;
   const sessionToken = await getToken();

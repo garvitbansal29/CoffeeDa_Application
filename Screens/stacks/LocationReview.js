@@ -2,41 +2,58 @@ import React, {useState, useEffect} from 'react';
 import {Image, View, FlatList} from 'react-native';
 import {Title, Button, Modal, Portal} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {backgroundStyles} from '../../Components/AppStyle';
 import colours from '../../Components/ColourPallet';
 import ReviewCard from '../../Components/Reviewcard';
 import AddReviewForm from '../../Components/AddReviewForm';
+import {
+  getSingleLocationData,
+  getUserReviewID,
+} from '../../Components/apiUtils';
 
 const containerStyle = {backgroundColor: 'white', padding: 20};
 
-const App = ({navigation, route}) => {
+const App = ({route}) => {
+  const [spinner, setSpinner] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [cafe, setCafe] = useState({});
+  const [userReviewIDs, setUserReviewIDs] = useState([]);
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
-  const {itemDetails} = route.params.props;
 
-  const locationDetails = {
-    cafeID: itemDetails.location_id,
-    cafeName: itemDetails.location_name,
-    town: itemDetails.location_town,
-    image: itemDetails.photo_path,
-    latitude: itemDetails.latitude,
-    longitute: itemDetails.longitute,
-    starRating: itemDetails.avg_overall_rating,
-    priceRating: itemDetails.avg_price_rating,
-    qualityRating: itemDetails.avg_quality_rating,
-    cleanlinessRating: itemDetails.avg_clenliness_rating,
-    // locationReviews: itemDetails.location_reviews,
-  };
-  const locationReviews = itemDetails.location_reviews;
+  // const {itemDetails, locationID} = route.params;
+  const {locationID} = route.params;
 
+  const locationReviews = cafe.location_reviews;
+
+  async function getLocationData() {
+    setSpinner(true);
+    setUserReviewIDs(await getUserReviewID());
+    setCafe(await getSingleLocationData({locationID}));
+    setSpinner(false);
+  }
+
+  useEffect(() => {
+    getLocationData();
+  }, []);
+
+  // useEffect(() => {
+  //   setSpinner(false);
+  // }, []);
   return (
     <View style={backgroundStyles.container}>
+      <Spinner
+        visible={spinner}
+        textContent="Loading..."
+        textStyle={{color: '#FFF'}}
+      />
       <Image
         style={backgroundStyles.imgHeaderContainer}
-        source={{uri: locationDetails.image}}
+        source={{uri: cafe.photo_path}}
       />
       <View
         style={{
@@ -54,11 +71,11 @@ const App = ({navigation, route}) => {
             fontSize: 25,
           }}
         >
-          {locationDetails.cafeName}
+          {cafe.location_name}
         </Title>
         <Rating
           imageSize={15}
-          startingValue={locationDetails.starRating}
+          startingValue={cafe.avg_overall_rating}
           type="custom"
           ratingBackgroundColor={colours.background}
           readonly
@@ -87,7 +104,13 @@ const App = ({navigation, route}) => {
         <View>
           <FlatList
             data={locationReviews}
-            renderItem={({item}) => <ReviewCard cardDetails={item} />}
+            renderItem={({item}) => (
+              <ReviewCard
+                cardDetails={item}
+                locationID={locationID}
+                userReviewIDs={userReviewIDs}
+              />
+            )}
             keyExtractor={(item) => item.review_id.toString()}
             contentContainerStyle={{
               paddingBottom: 35,
@@ -109,8 +132,8 @@ const App = ({navigation, route}) => {
           }}
         >
           <AddReviewForm
-            locationID={locationDetails.cafeID}
-            locationName={locationDetails.cafeName}
+            locationID={cafe.location_id}
+            locationName={cafe.location_name}
           />
         </Modal>
       </Portal>

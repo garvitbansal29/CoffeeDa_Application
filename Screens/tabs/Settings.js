@@ -3,15 +3,26 @@ import {Alert, View} from 'react-native';
 import {Button, TextInput, Title} from 'react-native-paper';
 import {} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {getUserDetails, updateUserDetails} from '../../Components/apiUtils';
+import {
+  getUserDetails,
+  updateUserDetails,
+  requestLogout,
+} from '../../Components/apiUtils';
 
-const App = () => {
+const App = ({navigation}) => {
   const [spinner, setSpinner] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+
+  const handleLogout = async () => {
+    const response = await requestLogout();
+    if (response) {
+      navigation.navigate('SignIn');
+    }
+  };
 
   async function showUserDetails() {
     setSpinner(true);
@@ -50,14 +61,22 @@ const App = () => {
         textStyle={{color: '#FFF'}}
       />
       <Title style={{alignSelf: 'center', color: 'black'}}> Account</Title>
-
-      <Button
-        mode="outlined"
-        style={{alignSelf: 'flex-end', height: 40, width: 100}}
-        onPress={() => setIsDisabled(!isDisabled)}
-      >
-        Edit
-      </Button>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+        <Button
+          mode="contained"
+          style={{height: 40, width: 100, margin: 6}}
+          onPress={() => handleLogout()}
+        >
+          lOGOUT
+        </Button>
+        <Button
+          mode="outlined"
+          style={{height: 40, width: 100, margin: 6}}
+          onPress={() => setIsDisabled(!isDisabled)}
+        >
+          Edit
+        </Button>
+      </View>
       <TextInput
         disabled={isDisabled}
         style={{margin: 0, padding: 0}}
@@ -88,6 +107,7 @@ const App = () => {
       <Button disabled={isDisabled} onPress={() => updateUserInfo()}>
         Submit
       </Button>
+      <Button mode="outlined">My Reviews</Button>
     </View>
   );
 };

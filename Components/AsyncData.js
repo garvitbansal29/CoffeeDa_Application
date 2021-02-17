@@ -47,4 +47,33 @@ const getUserID = async () => {
   return 'No User ID Fount';
 };
 
-export {setToken, getToken, setUserID, getUserID};
+const removeUserID = async () => {
+  try {
+    await AsyncStorage.removeItem('@user_id');
+    console.log('Async User ID Removed');
+    return true;
+  } catch (error) {
+    console.log(`Async User ID was not removed: ${error}`);
+    return false;
+  }
+};
+
+const removeUsertoken = async () => {
+  try {
+    await AsyncStorage.removeItem('@user_token');
+    console.log('Async User Token Removed');
+    return true;
+  } catch (error) {
+    console.log(`Async User Token was not removed: ${error}`);
+    return false;
+  }
+};
+
+export {
+  setToken,
+  getToken,
+  setUserID,
+  getUserID,
+  removeUserID,
+  removeUsertoken,
+};
