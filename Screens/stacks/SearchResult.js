@@ -96,7 +96,7 @@ const App = ({navigation}) => {
 
   useEffect(() => {
     getCurrentCoordinates();
-  });
+  }, []);
 
   return (
     <View style={{backgroundColor: colours.background}}>

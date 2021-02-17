@@ -17,6 +17,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import RatingIndicator from './CommentCardIndicators';
 import colours from './ColourPallet';
+import UpdateReviewModal from './UpdateReviewModal';
 import {
   getReviewPhoto,
   getLikedReviewID,
@@ -28,6 +29,7 @@ const App = (props) => {
   const [spinner, setSpinner] = useState(false);
 
   const {cardDetails, locationID, userReviewIDs} = props;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [revImage, setImage] = useState();
   const [isImage, setIsImage] = useState(false);
@@ -37,7 +39,7 @@ const App = (props) => {
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => {
-    console.log('BROOOOOO>>>>>>>');
+    console.log('THIS IS BEAUTIFULLLLLL');
     setModalVisible(false);
   };
 
@@ -120,24 +122,14 @@ const App = (props) => {
     setAllCardData();
   }, []);
 
-  const containerStyle = {backgroundColor: 'white', padding: 20};
-
   return (
     <View>
       <Portal>
-        <Modal
-          contentContainerStyle={containerStyle}
-          visible={modalVisible}
-          transparent
-          dismissable
-          onDismiss={() => {
-            hideModal();
-          }}
-        >
-          <View style={{alignItems: 'center'}}>
-            <Button>search</Button>
-          </View>
-        </Modal>
+        <UpdateReviewModal
+          visibility={modalVisible}
+          hideModal={hideModal}
+          review={review}
+        />
       </Portal>
       <Spinner
         visible={spinner}

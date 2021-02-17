@@ -472,6 +472,53 @@ const getReviewData = async (props) => {
   }
 };
 
+export const updateReview = async (props) => {
+  const {
+    overallRating,
+    priceRating,
+    qualityRating,
+    cleanlinessRating,
+    reviewBody,
+    locationID,
+    reviewID,
+  } = props;
+
+  const sessionToken = await getToken();
+
+  const settings = {
+    method: 'PATCH',
+    headers: {
+      'x-authorization': sessionToken,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      overall_rating: overallRating,
+      price_rating: priceRating,
+      quality_rating: qualityRating,
+      clenliness_rating: cleanlinessRating,
+      review_body: reviewBody,
+    }),
+  };
+
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}`,
+      settings,
+    );
+
+    const {status} = response;
+    if (status === 200) {
+      console.log('Update Review Successful');
+      return true;
+    }
+    console.log(`Update Review: Unsuccessful Status: ${status}`);
+    return false;
+  } catch (error) {
+    console.log(`Update Review Unsuccessful: ${error}`);
+    return false;
+  }
+};
+
 export {
   addReview,
   getUserDetails,
