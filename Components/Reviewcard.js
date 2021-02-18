@@ -90,7 +90,6 @@ const App = (props) => {
   }
 
   async function checkIfUserLiked() {
-    // const likedList = await getLikedReviewID();
     setLiked(
       userLikedReviewID.some((item) => item.likedReviewID === review.reviewID),
     );
@@ -112,9 +111,9 @@ const App = (props) => {
     setSpinner(false);
   }
 
-  function openUpdateReviewModal() {
-    showModal();
-  }
+  // function openUpdateReviewModal() {
+  //   showModal();
+  // }
 
   useEffect(() => {
     setAllCardData();
@@ -142,7 +141,7 @@ const App = (props) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Title>Review ID: {review.reviewID}</Title>
             {isUserReview ? (
-              <Button mode="contained" onPress={() => openUpdateReviewModal()}>
+              <Button mode="contained" onPress={() => showModal()}>
                 Edit
               </Button>
             ) : (

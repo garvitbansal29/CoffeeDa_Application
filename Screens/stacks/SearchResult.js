@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {Button, TextInput, Searchbar, Modal, Text} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -25,8 +25,9 @@ const App = ({navigation}) => {
   const [qualityRating, setQualityRating] = useState(0);
   const [cleanlinessRating, setCleanlinessRating] = useState(0);
   const [searchIn, setSearchIn] = useState('');
-  const [resultLimit, setResultLimit] = useState('');
-  const [resultOffset, setResultOffset] = useState('');
+  const [resultLimit, setResultLimit] = useState(3);
+  const [resultOffset, setResultOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currLongitude, setLongitute] = useState(0);
   const [currLatitude, setLatitude] = useState(0);
@@ -35,7 +36,6 @@ const App = ({navigation}) => {
   const hideModal = () => setModalVisible(false);
 
   const getLocationData = async () => {
-    setSpinner(true);
     const allLocations = await apiUtils({
       searchValue: searchBarValue,
       overallRating,
@@ -46,12 +46,9 @@ const App = ({navigation}) => {
       resultLimit,
       resultOffset,
     });
-    // const sortByStars = await allLocations.slice(0);
-    const sortByStars = allLocations.sort((a, b) => {
-      return b.avg_overall_rating - a.avg_overall_rating;
-    });
-    setLocationsData(sortByStars);
-    setSpinner(false);
+
+    setLocationsData((data) => data.concat(allLocations));
+    setIsLoading(false);
   };
 
   const handleModalClick = () => {
@@ -90,9 +87,26 @@ const App = ({navigation}) => {
     );
   };
 
+  const loadMoreData = () => {
+    setResultOffset((num) => num + resultLimit);
+    setIsLoading(true);
+  };
+
+  const renderFooter = () => {
+    return isLoading ? (
+      <View style={{marginBottom: 50, alignItems: 'center'}}>
+        <ActivityIndicator size="large" color={colours.primary} />
+      </View>
+    ) : (
+      <View />
+    );
+  };
+
   useEffect(() => {
+    console.log(`Current Offset : ${resultOffset}`);
+    setIsLoading(true);
     getLocationData();
-  }, [searchBarValue]);
+  }, [resultOffset]);
 
   useEffect(() => {
     getCurrentCoordinates();
@@ -100,11 +114,6 @@ const App = ({navigation}) => {
 
   return (
     <View style={{backgroundColor: colours.background}}>
-      <Spinner
-        visible={spinner}
-        textContent="Loading..."
-        textStyle={{color: '#FFF'}}
-      />
       <Searchbar
         theme={{placeholder: 'black'}}
         placeholder="Search"
@@ -145,7 +154,11 @@ const App = ({navigation}) => {
             currLongitude={currLongitude}
           />
         )}
-        keyExtractor={(item) => item.location_id.toString()}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={() => loadMoreData()}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={() => renderFooter()}
+        contentContainerStyle={{paddingBottom: 100}}
       />
       <Modal
         visible={modalVisible}
