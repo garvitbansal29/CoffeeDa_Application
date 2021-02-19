@@ -25,20 +25,20 @@ const App = ({route}) => {
   const [userLikedRevID, setUserLikedRevID] = useState([]);
 
   const showModal = () => setModalVisible(true);
-  const hideModal = () => setModalVisible(false);
+  const hideModal = async () => setModalVisible(false);
 
   // const {itemDetails, locationID} = route.params;
   const {locationID} = route.params;
 
   const locationReviews = cafe.location_reviews;
 
-  async function getLocationData() {
+  const getLocationData = async () => {
     setSpinner(true);
     setUserReviewIDs(await getUserReviewID());
     setUserLikedRevID(await getLikedReviewID());
     setCafe(await getSingleLocationData({locationID}));
     setSpinner(false);
-  }
+  };
 
   useEffect(() => {
     getLocationData();
@@ -110,6 +110,7 @@ const App = ({route}) => {
                 locationID={locationID}
                 userReviewIDs={userReviewIDs}
                 userLikedReviewID={userLikedRevID}
+                getLocationData={getLocationData}
               />
             )}
             keyExtractor={(item) => item.review_id.toString()}

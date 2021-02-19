@@ -28,7 +28,13 @@ import {
 const App = (props) => {
   const [spinner, setSpinner] = useState(false);
 
-  const {cardDetails, locationID, userReviewIDs, userLikedReviewID} = props;
+  const {
+    cardDetails,
+    locationID,
+    userReviewIDs,
+    userLikedReviewID,
+    getLocationData,
+  } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [revImage, setImage] = useState();
@@ -38,9 +44,10 @@ const App = (props) => {
   const [isUserReview, setIsUserReview] = useState(false);
 
   const showModal = () => setModalVisible(true);
-  const hideModal = () => {
-    console.log('THIS IS BEAUTIFULLLLLL');
+
+  const hideModal = async () => {
     setModalVisible(false);
+    getLocationData();
   };
 
   const review = {
@@ -110,10 +117,6 @@ const App = (props) => {
 
     setSpinner(false);
   }
-
-  // function openUpdateReviewModal() {
-  //   showModal();
-  // }
 
   useEffect(() => {
     setAllCardData();

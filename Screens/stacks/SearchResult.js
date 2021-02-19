@@ -156,7 +156,7 @@ const App = ({navigation}) => {
         )}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={() => loadMoreData()}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={0.1}
         ListFooterComponent={() => renderFooter()}
         contentContainerStyle={{paddingBottom: 100}}
       />

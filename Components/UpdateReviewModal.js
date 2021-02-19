@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
-import {Text, Modal, Title, TextInput, Button} from 'react-native-paper';
+import {
+  Text,
+  Modal,
+  Title,
+  TextInput,
+  Button,
+  IconButton,
+} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
+import Colours from './ColourPallet';
 
-import {updateReview} from './apiUtils';
+import {updateReview, deleteReview} from './apiUtils';
 
 const App = ({hideModal, visibility, review}) => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
@@ -33,6 +41,19 @@ const App = ({hideModal, visibility, review}) => {
     }
   };
 
+  const deleteUserReview = async () => {
+    const response = await deleteReview({
+      locationID: review.locationID,
+      reviewID: review.reviewID,
+    });
+    if (response) {
+      Alert.alert('Review Deleted Successfully');
+      hideModal();
+    } else {
+      Alert.alert('Error: Review was not deleted');
+    }
+  };
+
   return (
     <Modal
       visible={visibility}
@@ -41,7 +62,15 @@ const App = ({hideModal, visibility, review}) => {
       contentContainerStyle={containerStyle}
     >
       <View style={{alignItems: 'center'}}>
-        <Title>Update your Review for [LOCATION NAME]! </Title>
+        <View style={{flexDirection: 'row'}}>
+          <Title>Update your Review for [LOCATION NAME]! </Title>
+          <IconButton
+            icon="delete"
+            color={Colours.primary}
+            size={20}
+            onPress={() => deleteUserReview()}
+          />
+        </View>
         <Rating
           startingValue={overallRating}
           style={{paddingVertical: 10}}

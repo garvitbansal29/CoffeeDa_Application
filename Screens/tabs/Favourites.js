@@ -1,13 +1,13 @@
 import React from 'react';
-import {Alert, View, PermissionsAndroid} from 'react-native';
-import {Text, Button} from 'react-native-paper';
+import {useEffect} from 'react';
+import {Alert, View} from 'react-native';
+import {Button, ToggleButton} from 'react-native-paper';
+import {Header, Content, Tab, Tabs, Container, Text} from 'native-base';
+
+import Colours from '../../Components/ColourPallet';
 
 const App = () => {
-  return (
-    <View style={{flex: 1}}>
-      <Text>FAVOURITES STUFF</Text>
-    </View>
-  );
+  return <Container></Container>;
 };
 
 export default App;
