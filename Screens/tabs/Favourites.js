@@ -7,7 +7,11 @@ import {Header, Content, Tab, Tabs, Container, Text} from 'native-base';
 import Colours from '../../Components/ColourPallet';
 
 const App = () => {
-  return <Container></Container>;
+  return (
+    <View>
+      <Text>blablalba</Text>
+    </View>
+  );
 };
 
 export default App;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, View} from 'react-native';
 import {
   Text,
@@ -9,9 +9,10 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
-import Colours from './ColourPallet';
 
+import Colours from './ColourPallet';
 import {updateReview, deleteReview} from './apiUtils';
+import filter from './filter';
 
 const App = ({hideModal, visibility, review}) => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
@@ -53,6 +54,10 @@ const App = ({hideModal, visibility, review}) => {
       Alert.alert('Error: Review was not deleted');
     }
   };
+
+  useEffect(() => {
+    setReviewBody((input) => filter.clean(input));
+  }, [reviewBody]);
 
   return (
     <Modal

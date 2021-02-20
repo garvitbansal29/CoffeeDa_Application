@@ -59,7 +59,7 @@ const App = ({navigation}) => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
   const openInMaps = () => {
-    navigation.navigate('MapResults', {locationsData});
+    navigation.navigate('MapDisplay', {locationsData});
   };
 
   const getCurrentCoordinates = async () => {
