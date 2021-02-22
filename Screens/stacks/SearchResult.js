@@ -32,6 +32,8 @@ const App = ({navigation}) => {
   const [currLongitude, setLongitute] = useState(0);
   const [currLatitude, setLatitude] = useState(0);
 
+  const [isEndFound, setIsEndFound] = useState(false);
+
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
@@ -47,19 +49,57 @@ const App = ({navigation}) => {
       resultOffset,
     });
 
-    setLocationsData((data) => data.concat(allLocations));
     setIsLoading(false);
+    return allLocations;
+  };
+
+  const increaseResultOffSet = () => {
+    if (!isEndFound) setResultOffset((num) => num + resultLimit);
+  };
+
+  const getCafeData = async () => {
+    console.log(`>>>GET CAFE DATA STARTED<<<`);
+    const responseData = await getLocationData();
+    if (responseData.length) {
+      console.log(`>>>GET CAFE: THERE IS DATA`);
+      if (resultOffset === 0) {
+        console.log(`>>>GET CAFE: NEW DATA HAS BEEN SET`);
+        setLocationsData(responseData);
+      } else {
+        console.log(
+          `>>> GET CAFE: PAGINATED NEW DATA - PAGINATION: ${resultOffset}`,
+        );
+        setLocationsData((data) => data.concat(responseData));
+      }
+    } else {
+      console.log(`>>>GET CAFE: NO DATA`);
+      setIsEndFound(true);
+    }
+
+    console.log(`>>>GET CAFE: Finished<<<`);
+  };
+
+  const resetResultOffSet = () => {
+    setIsEndFound(false);
+    if (resultOffset === 0) {
+      getCafeData();
+    } else {
+      resetResultOffSet();
+    }
   };
 
   const handleModalClick = () => {
-    getLocationData();
+    resetResultOffSet();
     hideModal();
   };
 
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
   const openInMaps = () => {
-    navigation.navigate('MapDisplay', {locationsData});
+    navigation.navigate('Map', {
+      screen: 'MapDisplay',
+      params: {locationsData},
+    });
   };
 
   const getCurrentCoordinates = async () => {
@@ -87,11 +127,6 @@ const App = ({navigation}) => {
     );
   };
 
-  const loadMoreData = () => {
-    setResultOffset((num) => num + resultLimit);
-    setIsLoading(true);
-  };
-
   const renderFooter = () => {
     return isLoading ? (
       <View style={{marginBottom: 50, alignItems: 'center'}}>
@@ -103,14 +138,19 @@ const App = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log(`Current Offset : ${resultOffset}`);
     setIsLoading(true);
-    getLocationData();
-  }, [resultOffset]);
+    getCurrentCoordinates();
+    resetResultOffSet();
+  }, []);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   resetResultOffSet();
+  // }, [searchBarValue]);
 
   useEffect(() => {
-    getCurrentCoordinates();
-  }, []);
+    getCafeData();
+  }, [resultOffset]);
 
   return (
     <View style={{backgroundColor: colours.background}}>
@@ -132,7 +172,7 @@ const App = ({navigation}) => {
           theme={{roundness: 0}}
           style={{flex: 1}}
           mode="contained"
-          onPress={() => getLocationData()}
+          onPress={() => resetResultOffSet()}
         >
           Search
         </Button>
@@ -155,7 +195,7 @@ const App = ({navigation}) => {
           />
         )}
         keyExtractor={(item, index) => index.toString()}
-        onEndReached={() => loadMoreData()}
+        onEndReached={() => increaseResultOffSet()}
         onEndReachedThreshold={0.1}
         ListFooterComponent={() => renderFooter()}
         contentContainerStyle={{paddingBottom: 100}}

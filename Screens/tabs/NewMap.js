@@ -12,7 +12,6 @@ import {getLocationData} from '../../Components/apiUtils';
 
 const App = (props) => {
   const {navigation} = props;
-  console.log(`TESTTESTTEST>>>> ${JSON.stringify(props)}`);
   const [spinner, setSpinner] = useState(false);
   const [currLongitude, setLongitute] = useState(0);
   const [currLatitude, setLatitude] = useState(0);
@@ -66,8 +65,6 @@ const App = (props) => {
   };
 
   const displaySeachResults = async () => {
-    setLocationsData(props.params.locationsData);
-
     if (!Global.locationPermission) {
       console.log('asking for permission now');
       Global.locationPermission = await GetLocationPermission();
@@ -94,8 +91,11 @@ const App = (props) => {
 
   useEffect(() => {
     navigation.addListener('focus', () => {
+      console.log(`TESTTESTTEST>>>> ${JSON.stringify(props)}`);
       if (props.params) {
+        setLocationsData(props.params.locationsData);
         displaySeachResults();
+        navigation.setParams({locationsData: null});
       } else {
         getAllClosestsCafe();
       }
