@@ -77,6 +77,7 @@ const LocationDisplay = (props) => {
       onPress={() =>
         navigation.navigate('LocationReviews', {
           locationID: location.cafeID,
+          locationName: location.cafeName,
         })
       }
       elevation={10}

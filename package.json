@@ -23,6 +23,8 @@
     "node-fetch": "^2.6.1",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-camera": "^3.42.2",
+    "react-native-camera-hooks": "^0.5.0",
     "react-native-geolocation-service": "^5.2.0",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-loading-spinner-overlay": "^2.0.0",

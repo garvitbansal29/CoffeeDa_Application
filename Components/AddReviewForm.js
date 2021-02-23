@@ -1,20 +1,26 @@
 import React, {useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, View, Image} from 'react-native';
 import {} from 'react-native-gesture-handler';
-import {Text, Title, TextInput, Button} from 'react-native-paper';
-import {Rating, AirbnbRating} from 'react-native-ratings';
+import {Text, Title, TextInput, Button, IconButton} from 'react-native-paper';
+import {Rating} from 'react-native-ratings';
+// import {useNavigation} from '@react-navigation/native';
+
 import {addReview} from './apiUtils';
 import {setToken} from './SessionToken';
 
 const App = (props) => {
-  const {locationID, locationName} = props;
+  const {locationID, locationName, navigation, hideModal} = props;
+  // const navigation = useNavigation();
 
   const [overallRating, setOverallRating] = useState(0);
   const [priceRating, setPriceRating] = useState(0);
   const [qualityRating, setQualityRating] = useState(0);
   const [cleanlinessRating, setCleanlinessRating] = useState(0);
   const [reviewBody, setReviewBody] = useState('');
+  const [isImage, setIsImage] = useState(false);
+  const [reviewImage, setReviewImage] = useState('https://picsum.photos/700');
 
+  const addReviewImage = (img) => setReviewImage(img);
   const submitReview = async () => {
     const requestSuccessful = await addReview({
       overallRating,
@@ -35,6 +41,10 @@ const App = (props) => {
       setReviewBody('');
     }
   };
+  const openCamera = () => {
+    navigation.navigate('Camera');
+    hideModal();
+  };
 
   return (
     <View>
@@ -50,8 +60,8 @@ const App = (props) => {
         mode="outlined"
         label="Review"
         placeholder="Review"
-        value={reviewBody}
         onChangeText={(text) => setReviewBody(text)}
+        value={reviewBody}
         multiline
         numberOfLines={5}
       />
@@ -88,6 +98,21 @@ const App = (props) => {
           />
         </View>
       </View>
+      <View style={{alignItems: 'center'}}>
+        {isImage ? (
+          <Image
+            style={{width: 100, height: 100}}
+            source={{uri: reviewImage}}
+          />
+        ) : (
+          <IconButton
+            icon="image-plus"
+            size={50}
+            onPress={() => openCamera()}
+          />
+        )}
+      </View>
+
       <Button onPress={() => submitReview()}>SUBMIT</Button>
     </View>
   );

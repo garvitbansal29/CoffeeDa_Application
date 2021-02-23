@@ -8,9 +8,6 @@ import {
   Paragraph,
   Card,
   Title,
-  Modal,
-  Text,
-  TextInput,
   Portal,
 } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -18,14 +15,11 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import RatingIndicator from './CommentCardIndicators';
 import colours from './ColourPallet';
 import UpdateReviewModal from './UpdateReviewModal';
-import {
-  getReviewPhoto,
-  getLikedReviewID,
-  likeReview,
-  unLikeReview,
-} from './apiUtils';
+import {getReviewPhoto, likeReview, unLikeReview} from './apiUtils';
 
 const App = (props) => {
+  const isFocused = useIsFocused();
+
   const [spinner, setSpinner] = useState(false);
 
   const {
@@ -119,8 +113,10 @@ const App = (props) => {
   }
 
   useEffect(() => {
-    setAllCardData();
-  }, []);
+    if (isFocused) {
+      setAllCardData();
+    }
+  }, [isFocused]);
 
   return (
     <View>

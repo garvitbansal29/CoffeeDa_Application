@@ -104,7 +104,7 @@ export const getReviewPhoto = async (props) => {
   };
   try {
     const response = await fetch(
-      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo?timestamp=3sdf90sfdfadf845`,
       settings,
     );
     const {status, url} = response;
@@ -183,6 +183,40 @@ export const deleteReview = async (props) => {
     return false;
   }
 };
+
+// Refacotred
+export const addReviewImage = async (props) => {
+  const {locationID, reviewID, img} = props;
+  const sessionToken = await getToken();
+
+  const settings = {
+    method: 'POST',
+    headers: {'x-authorization': sessionToken, 'Content-Type': 'image/jpeg'},
+    body: img,
+  };
+
+  console.log(`HERE IS THE IMAGE DATA I HAVE:  ${JSON.stringify(img)}`);
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
+      settings,
+    );
+
+    const {status} = response;
+    if (status === 200) {
+      console.log(`Picture Uploaded: Successful`);
+      return true;
+    }
+
+    console.log(`Picture Uploaded: Unsuccessful ${status}`);
+    return false;
+  } catch (error) {
+    console.log(`Picture Uploaded: Unsucessful ${error}`);
+    return false;
+  }
+};
+
+// Refactored
 const addReview = async (props) => {
   const sessionToken = await getToken();
 
@@ -196,28 +230,36 @@ const addReview = async (props) => {
   } = props;
   console.log(reviewBody);
 
+  const settings = {
+    method: 'POST',
+    headers: {
+      'x-authorization': sessionToken,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      overall_rating: overallRating,
+      price_rating: priceRating,
+      quality_rating: qualityRating,
+      clenliness_rating: cleanlinessRating,
+      review_body: reviewBody,
+    }),
+  };
+
   try {
     const response = await fetch(
       `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review`,
-      {
-        method: 'POST',
-        headers: {
-          'x-authorization': sessionToken,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          overall_rating: overallRating,
-          price_rating: priceRating,
-          quality_rating: qualityRating,
-          clenliness_rating: cleanlinessRating,
-          review_body: reviewBody,
-        }),
-      },
+      settings,
     );
-    console.log('Review Posted Successfully');
-    return true;
+
+    const {status} = response;
+    if (status === 201) {
+      console.log('Review Posted Successfully');
+      return true;
+    }
+    console.log(`Review was NOT posted successfully: satus error-${status}`);
+    return false;
   } catch (error) {
-    console.log(`ERROR:  ${error}`);
+    console.log(`Review was NOT posted successfully: satus error-${error}`);
     return false;
   }
 };
@@ -341,7 +383,7 @@ export const getUserReviews = async () => {
     console.log(`Get User Reviews: Successful`);
     return reviews;
   } catch (error) {
-    console.log(`Get User Revies: Unsuccessful: ${error}`);
+    console.log(`Get User Reviews: Unsuccessful: ${error}`);
     return [];
   }
 };

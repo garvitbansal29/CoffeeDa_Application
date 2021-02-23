@@ -3,6 +3,7 @@ import {Image, View, FlatList} from 'react-native';
 import {Title, Button, Modal, Portal} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {useIsFocused} from '@react-navigation/native';
 
 import {backgroundStyles} from '../../Components/AppStyle';
 import colours from '../../Components/ColourPallet';
@@ -16,21 +17,17 @@ import {
 
 const containerStyle = {backgroundColor: 'white', padding: 20};
 
-const App = ({route}) => {
+const App = ({route, navigation}) => {
   const [spinner, setSpinner] = useState(false);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [cafe, setCafe] = useState({});
   const [userReviewIDs, setUserReviewIDs] = useState([]);
   const [userLikedRevID, setUserLikedRevID] = useState([]);
+  const [locationReviews, setLocRevs] = useState([]);
 
-  const showModal = () => setModalVisible(true);
-  const hideModal = async () => setModalVisible(false);
+  const {locationID, locationName} = route.params;
 
-  // const {itemDetails, locationID} = route.params;
-  const {locationID} = route.params;
-
-  const locationReviews = cafe.location_reviews;
+  const isFocused = useIsFocused();
 
   const getLocationData = async () => {
     setSpinner(true);
@@ -41,8 +38,14 @@ const App = ({route}) => {
   };
 
   useEffect(() => {
-    getLocationData();
-  }, []);
+    if (isFocused) {
+      getLocationData();
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    setLocRevs(cafe.location_reviews);
+  }, [cafe]);
 
   return (
     <View style={backgroundStyles.container}>
@@ -95,7 +98,10 @@ const App = ({route}) => {
             style={{flex: 1, margin: 6, height: 35}}
             mode="contained"
             onPress={() => {
-              showModal();
+              navigation.navigate('AddReviewScreen', {
+                locationName,
+                locationID,
+              });
             }}
           >
             Add Review
@@ -120,25 +126,6 @@ const App = ({route}) => {
           />
         </View>
       </View>
-      <Portal>
-        <Modal
-          contentContainerStyle={containerStyle}
-          transparent
-          animationType="slide"
-          backdropOpacity={1}
-          backdropColor="white"
-          visible={modalVisible}
-          dismissable
-          onDismiss={() => {
-            hideModal();
-          }}
-        >
-          <AddReviewForm
-            locationID={cafe.location_id}
-            locationName={cafe.location_name}
-          />
-        </Modal>
-      </Portal>
     </View>
   );
 };

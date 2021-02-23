@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import {} from 'react-native';
 
+import AddReviewScreen from './Screens/stacks/AddReviewScreen';
 import SignIn from './Screens/stacks/Signin';
 import SignUp from './Screens/stacks/Signup';
 import Search from './Screens/tabs/Search';
@@ -14,9 +15,9 @@ import favouriteLocs from './Screens/tabs/Favourites';
 import Settings from './Screens/tabs/Settings';
 import SearchResult from './Screens/stacks/SearchResult';
 import LocationReviews from './Screens/stacks/LocationReview';
-// import MapResultsScreen from './Screens/stacks/MapsDisplay';
 import MapDisplay from './Screens/tabs/NewMap';
 import Colours from './Components/ColourPallet';
+import Camera from './Screens/stacks/appCamera';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -31,8 +32,9 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="SearchResult" component={SearchResult} />
-        {/* <Stack.Screen name="MapResults" component={MapResultsScreen} /> */}
         <Stack.Screen name="LocationReviews" component={LocationReviews} />
+        <Stack.Screen name="Camera" component={Camera} />
+        <Stack.Screen name="AddReviewScreen" component={AddReviewScreen} />
       </Stack.Navigator>
     );
   }
@@ -71,6 +73,7 @@ const App = () => {
             ),
           }}
         />
+
         <Tab.Screen
           name="Account"
           component={Settings}
@@ -109,6 +112,8 @@ const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
+
+  // return <AddReviewScreen />;
 };
 
 export default App;
