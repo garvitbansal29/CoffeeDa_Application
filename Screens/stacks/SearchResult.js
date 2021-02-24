@@ -84,7 +84,7 @@ const App = ({navigation}) => {
     if (resultOffset === 0) {
       getCafeData();
     } else {
-      resetResultOffSet();
+      setResultOffset(0);
     }
   };
 
@@ -142,11 +142,6 @@ const App = ({navigation}) => {
     getCurrentCoordinates();
     resetResultOffSet();
   }, []);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   resetResultOffSet();
-  // }, [searchBarValue]);
 
   useEffect(() => {
     getCafeData();

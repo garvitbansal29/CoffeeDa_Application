@@ -11,18 +11,19 @@ import Global from '../../Components/Global';
 import {getLocationData} from '../../Components/apiUtils';
 
 const App = (props) => {
-  const {navigation} = props;
+  const {navigation, route} = props;
   const [spinner, setSpinner] = useState(false);
   const [currLongitude, setLongitute] = useState(0);
   const [currLatitude, setLatitude] = useState(0);
   const [locationsData, setLocationsData] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]);
 
   const [centerCoords, setCenterCoords] = useState({
     latitude: 0,
     longitude: 0,
   });
 
-  const getCenterCoords = async (prop) => {
+  const getCenterCoords = (prop) => {
     const coords = getCenter(prop.locations);
     setCenterCoords(coords);
   };
@@ -36,19 +37,17 @@ const App = (props) => {
 
     Geolocation.getCurrentPosition(
       async (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitute(position.coords.longitude);
-
         const {coords} = position;
+
+        setLatitude(coords.latitude);
+        setLongitute(coords.longitude);
+
         const allLocationData = await getLocationData({searchValue: ''});
 
-        const sortedByDist = orderByDistance(
-          {
-            coords,
-          },
-          allLocationData,
-        ).slice(0, 3);
-
+        const sortedByDist = orderByDistance(coords, allLocationData).slice(
+          0,
+          3,
+        );
         getCenterCoords({locations: sortedByDist});
         setLocationsData(sortedByDist);
       },
@@ -75,7 +74,9 @@ const App = (props) => {
         setLatitude(position.coords.latitude);
         setLongitute(position.coords.longitude);
 
-        getCenterCoords({locations: locationsData});
+        setLocationsData(route.params.locationData, (data) => {
+          getCenterCoords({locations: data});
+        });
       },
       (error) => {
         Alert.alert(error.message);
@@ -86,21 +87,15 @@ const App = (props) => {
         maximumAge: 1000,
       },
     );
+
     setSpinner(false);
   };
 
   useEffect(() => {
     navigation.addListener('focus', () => {
-      console.log(`TESTTESTTEST>>>> ${JSON.stringify(props)}`);
-      if (props.params) {
-        setLocationsData(props.params.locationsData);
-        displaySeachResults();
-        navigation.setParams({locationsData: null});
-      } else {
-        getAllClosestsCafe();
-      }
+      displaySeachResults();
     });
-  }, []);
+  });
 
   return (
     <View style={{flex: 1}}>
@@ -115,8 +110,8 @@ const App = (props) => {
         region={{
           latitude: centerCoords.latitude,
           longitude: centerCoords.longitude,
-          latitudeDelta: 0.45,
-          longitudeDelta: 0.5,
+          latitudeDelta: 0,
+          longitudeDelta: 0.3,
         }}
       >
         <Marker

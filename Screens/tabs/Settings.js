@@ -107,7 +107,6 @@ const App = ({navigation}) => {
       <Button disabled={isDisabled} onPress={() => updateUserInfo()}>
         Submit
       </Button>
-      <Button mode="outlined">My Reviews</Button>
     </View>
   );
 };
