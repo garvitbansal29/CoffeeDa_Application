@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {Button, TextInput, Searchbar, Modal, Text} from 'react-native-paper';
+import {
+  Button,
+  TextInput,
+  Searchbar,
+  Modal,
+  Text,
+  RadioButton,
+} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Slider from '@react-native-community/slider';
 import Geolocation from 'react-native-geolocation-service';
@@ -33,6 +40,8 @@ const App = ({navigation}) => {
   const [currLatitude, setLatitude] = useState(0);
 
   const [isEndFound, setIsEndFound] = useState(false);
+
+  // const [checked, setChecked] = React.useState('none');
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -201,12 +210,33 @@ const App = ({navigation}) => {
         contentContainerStyle={containerStyle}
       >
         <View style={{alignItems: 'center'}}>
-          <TextInput
-            style={styles.fullSizeTextInput}
-            placeholder="Enter Location"
-            value={searchIn}
-            onChangeText={(text) => setSearchIn(text)}
-          />
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text>None</Text>
+              <RadioButton
+                value=""
+                status={searchIn === '' ? 'checked' : 'unchecked'}
+                onPress={() => setSearchIn('')}
+              />
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text>Favourite</Text>
+              <RadioButton
+                value="favourite"
+                status={searchIn === 'favourite' ? 'checked' : 'unchecked'}
+                onPress={() => setSearchIn('favourite')}
+              />
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text>Reviewed</Text>
+              <RadioButton
+                value="reviewed"
+                status={searchIn === 'reviewed' ? 'checked' : 'unchecked'}
+                onPress={() => setSearchIn('reviewed')}
+              />
+            </View>
+          </View>
+
           <Text>Overall Rating: {overallRating} </Text>
           <Slider
             style={{width: 200, height: 40}}

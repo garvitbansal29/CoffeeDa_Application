@@ -264,6 +264,33 @@ const addReview = async (props) => {
   }
 };
 
+export const deleteReviewPhoto = async (props) => {
+  const sessionToken = getToken();
+  const {locationID, reviewID} = props;
+  const settings = {
+    method: 'DELETE',
+    headers: {
+      'x-authorization': sessionToken,
+    },
+  };
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:3333/api/1.0.0/location/${locationID}/review/${reviewID}/photo`,
+      settings,
+    );
+    const {status} = response;
+    if (status === 200) {
+      console.log(`Delete review photo successful`);
+      return true;
+    }
+    console.log(`Delete review photo: Unsuccessful: satus ${status}`);
+    return false;
+  } catch (e) {
+    console.log(`Delete review photo: Unsuccessful: error: ${e}`);
+    return false;
+  }
+};
+
 const getUserDetails = async (props) => {
   const sessionToken = await getToken();
   const userID = await getUserID();

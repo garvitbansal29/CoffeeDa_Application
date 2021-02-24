@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, View, PermissionsAndroid, Image} from 'react-native';
-import {Text, Button, FAB} from 'react-native-paper';
+import {Alert, View, PermissionsAndroid, Image, WebView} from 'react-native';
+import {Text, Button, FAB, Title, Paragraph} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, Callout} from 'react-native-maps';
 import {orderByDistance, getCenter} from 'geolib';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -93,9 +93,9 @@ const App = (props) => {
 
   useEffect(() => {
     navigation.addListener('focus', () => {
-      displaySeachResults();
+      getAllClosestsCafe();
     });
-  });
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -114,11 +114,13 @@ const App = (props) => {
           longitudeDelta: 0.3,
         }}
       >
+        {/* Current Postion Marker */}
         <Marker
           title="CURRENT POSTIONS"
           coordinate={{latitude: currLatitude, longitude: currLongitude}}
         />
 
+        {/* Coffee Shop Location Markers */}
         {locationsData.map((location) => (
           <Marker
             key={location.location_id}
@@ -133,6 +135,41 @@ const App = (props) => {
               style={{height: 45, width: 45}}
               resizeMode="center"
             />
+            <Callout
+              onPress={() =>
+                navigation.push('LocationReviews', {
+                  locationName: location.location_name,
+                  locationID: location.location_id,
+                })
+              }
+            >
+              <View
+                style={{
+                  flex: 1,
+                  width: 200,
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Title style={{flex: 1}}>{location.location_name}</Title>
+                <Text style={{flex: 1, marginBottom: 0}}>
+                  {location.location_town}
+                </Text>
+                <Text style={{flex: 1, marginTop: 0}}>
+                  <Image
+                    source={{
+                      uri: 'https://picsum.photos/700',
+                    }}
+                    style={{
+                      width: 200,
+                      height: 200,
+                      resizeMode: 'cover',
+                      marginTop: 0,
+                    }}
+                  />
+                </Text>
+              </View>
+            </Callout>
           </Marker>
         ))}
       </MapView>

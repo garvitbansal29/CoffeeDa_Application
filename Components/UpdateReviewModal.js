@@ -11,7 +11,7 @@ import {
 import {Rating} from 'react-native-ratings';
 
 import Colours from './ColourPallet';
-import {updateReview, deleteReview} from './apiUtils';
+import {updateReview, deleteReview, deleteReviewPhoto} from './apiUtils';
 import filter from './filter';
 
 const App = ({hideModal, visibility, review}) => {
@@ -42,16 +42,28 @@ const App = ({hideModal, visibility, review}) => {
     }
   };
 
-  const deleteUserReview = async () => {
-    const response = await deleteReview({
+  const deletePhoto = async () => {
+    const response = await deleteReviewPhoto({
       locationID: review.locationID,
       reviewID: review.reviewID,
     });
-    if (response) {
-      Alert.alert('Review Deleted Successfully');
-      hideModal();
+    return response;
+  };
+
+  const deleteUserReview = async () => {
+    if (deletePhoto()) {
+      const response = await deleteReview({
+        locationID: review.locationID,
+        reviewID: review.reviewID,
+      });
+      if (response) {
+        Alert.alert('Review Deleted Successfully');
+        hideModal();
+      } else {
+        Alert.alert('Error: Review was not deleted');
+      }
     } else {
-      Alert.alert('Error: Review was not deleted');
+      Alert.alert('Error: Review photo was not deleted');
     }
   };
 

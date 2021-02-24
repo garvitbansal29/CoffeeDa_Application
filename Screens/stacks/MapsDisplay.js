@@ -40,7 +40,6 @@ const App = ({navigation, route}) => {
   const getSingleLocation = async () => {
     console.log('RESRESRAERAWERAW');
     const itemDetails = await getSingleLocationData({locationID: 2});
-    console.log(`Single location data =>>> ${JSON.stringify(itemDetails)}`);
     navigation.push('LocationReviews', {locationID: 5});
   };
 
