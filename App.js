@@ -10,12 +10,10 @@ import {} from 'react-native';
 import AddReviewScreen from './Screens/stacks/AddReviewScreen';
 import SignIn from './Screens/stacks/Signin';
 import SignUp from './Screens/stacks/Signup';
-import Search from './Screens/tabs/Search';
-import favouriteLocs from './Screens/tabs/Favourites';
 import Settings from './Screens/tabs/Settings';
 import SearchResult from './Screens/stacks/SearchResult';
 import LocationReviews from './Screens/stacks/LocationReview';
-import MapDisplay from './Screens/tabs/NewMap';
+import MapDisplay from './Screens/tabs/MapDisplay';
 import Colours from './Components/ColourPallet';
 import Camera from './Screens/stacks/appCamera';
 
@@ -27,11 +25,10 @@ const App = () => {
     return (
       <Stack.Navigator>
         <Stack.Screen
-          name="Search"
-          component={Search}
+          name="SearchResult"
+          component={SearchResult}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="SearchResult" component={SearchResult} />
         <Stack.Screen name="LocationReviews" component={LocationReviews} />
         <Stack.Screen name="Camera" component={Camera} />
         <Stack.Screen name="AddReviewScreen" component={AddReviewScreen} />
@@ -112,8 +109,6 @@ const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-
-  // return <AddReviewScreen />;
 };
 
 export default App;

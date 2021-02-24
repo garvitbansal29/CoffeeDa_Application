@@ -1,11 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Alert,
-  View,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, View, Image, TouchableHighlight} from 'react-native';
 import {} from 'react-native-gesture-handler';
 import {Text, Title, TextInput, Button, IconButton} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
@@ -96,6 +90,7 @@ const App = ({navigation, route, initialProps}) => {
           placeholder="Review"
           onChangeText={(text) => setReviewBody(text)}
           value={reviewBody}
+          autoFocus
           multiline
           numberOfLines={5}
         />
