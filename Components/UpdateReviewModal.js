@@ -7,6 +7,9 @@ import {
   TextInput,
   Button,
   IconButton,
+  Portal,
+  Dialog,
+  Paragraph,
 } from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 
@@ -14,7 +17,7 @@ import Colours from './ColourPallet';
 import {updateReview, deleteReview, deleteReviewPhoto} from './apiUtils';
 import filter from './filter';
 
-const App = ({hideModal, visibility, review}) => {
+const App = ({hideModal, visibility, review, locationName}) => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
   const [reviewBody, setReviewBody] = useState(review.reviewBody);
   const [overallRating, setOverallRating] = useState(review.overallRating);
@@ -23,6 +26,11 @@ const App = ({hideModal, visibility, review}) => {
   const [cleanlinessRating, setCleanlinessRating] = useState(
     review.cleanlinessRating,
   );
+  const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
+
+  const showDialog = () => setDeleteAlertVisible(true);
+
+  const hideDialog = () => setDeleteAlertVisible(false);
 
   const updateExistingReview = async () => {
     const response = await updateReview({
@@ -51,6 +59,8 @@ const App = ({hideModal, visibility, review}) => {
   };
 
   const deleteUserReview = async () => {
+    hideDialog();
+
     if (deletePhoto()) {
       const response = await deleteReview({
         locationID: review.locationID,
@@ -71,6 +81,27 @@ const App = ({hideModal, visibility, review}) => {
     setReviewBody((input) => filter.clean(input));
   }, [reviewBody]);
 
+  const DeleteReviewAlert = () => {
+    return (
+      <View>
+        <Portal>
+          <Dialog visible={deleteAlertVisible} onDismiss={() => hideDialog()}>
+            <Dialog.Title>Alert</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>
+                Are you sure you would like to delete this review?
+              </Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => hideDialog()}>Cancel</Button>
+              <Button onPress={() => deleteUserReview()}>Yes</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+      </View>
+    );
+  };
+
   return (
     <Modal
       visible={visibility}
@@ -78,14 +109,16 @@ const App = ({hideModal, visibility, review}) => {
       onDismiss={hideModal}
       contentContainerStyle={containerStyle}
     >
+      <DeleteReviewAlert />
       <View style={{alignItems: 'center'}}>
         <View style={{flexDirection: 'row'}}>
-          <Title>Update your Review for [LOCATION NAME]! </Title>
+          <Title>Update your Review for {locationName}! </Title>
           <IconButton
             icon="delete"
             color={Colours.primary}
             size={20}
-            onPress={() => deleteUserReview()}
+            // onPress={() => deleteUserReview()}
+            onPress={() => showDialog()}
           />
         </View>
         <Rating

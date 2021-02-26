@@ -5,7 +5,6 @@ import {Text, Title, TextInput, Button, IconButton} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
-import {useIsFocused} from '@react-navigation/native';
 
 import {
   addReview,
@@ -15,15 +14,6 @@ import {
 import {backgroundStyles} from '../../Components/AppStyle';
 
 const App = ({navigation, route, initialProps}) => {
-  const [image, setImage] = useState();
-  const [
-    {cameraRef, type, ratio, autoFocus, autoFocusPoint},
-    {takePicture},
-  ] = useCamera(initialProps);
-
-  const {params} = route;
-  const {locationName, locationID} = params;
-
   const [overallRating, setOverallRating] = useState(0);
   const [priceRating, setPriceRating] = useState(0);
   const [qualityRating, setQualityRating] = useState(0);
@@ -31,7 +21,15 @@ const App = ({navigation, route, initialProps}) => {
   const [reviewBody, setReviewBody] = useState('');
   const [isImage, setIsImage] = useState(false);
   const [openCamera, setOpenCamera] = useState(false);
-  const [reviewPost, setReviewPost] = useState(false);
+  const [image, setImage] = useState();
+
+  const [
+    {cameraRef, type, ratio, autoFocus, autoFocusPoint},
+    {takePicture},
+  ] = useCamera(initialProps);
+
+  const {params} = route;
+  const {locationName, locationID} = params;
 
   const handlePicture = async () => {
     const response = await takePicture();
@@ -46,7 +44,7 @@ const App = ({navigation, route, initialProps}) => {
       reviewID: newReview.reviewID,
       img: image,
     });
-    setReviewPost(response);
+    return response;
   };
 
   const submitReview = async () => {
@@ -74,6 +72,7 @@ const App = ({navigation, route, initialProps}) => {
   };
 
   const AddReviewDisplay = () => {
+    const [rest, test] = useState('');
     return (
       <View style={backgroundStyles.container}>
         <View style={{alignItems: 'center'}}>
@@ -90,10 +89,10 @@ const App = ({navigation, route, initialProps}) => {
           placeholder="Review"
           onChangeText={(text) => setReviewBody(text)}
           value={reviewBody}
-          autoFocus
           multiline
           numberOfLines={5}
         />
+
         <View style={{alignItems: 'flex-start'}}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{marginTop: 10, marginRight: 24}}>Price Rating:</Text>

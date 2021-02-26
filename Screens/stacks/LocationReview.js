@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Image, View, FlatList} from 'react-native';
-import {Title, Button, Modal, Portal} from 'react-native-paper';
+import {Title, Button} from 'react-native-paper';
 import {Rating} from 'react-native-ratings';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {useIsFocused} from '@react-navigation/native';
@@ -8,14 +8,11 @@ import {useIsFocused} from '@react-navigation/native';
 import {backgroundStyles} from '../../Components/AppStyle';
 import colours from '../../Components/ColourPallet';
 import ReviewCard from '../../Components/Reviewcard';
-import AddReviewForm from '../../Components/AddReviewForm';
 import {
   getLikedReviewID,
   getSingleLocationData,
   getUserReviewID,
 } from '../../Components/apiUtils';
-
-const containerStyle = {backgroundColor: 'white', padding: 20};
 
 const App = ({route, navigation}) => {
   const [spinner, setSpinner] = useState(false);
@@ -116,6 +113,7 @@ const App = ({route, navigation}) => {
                 locationID={locationID}
                 userReviewIDs={userReviewIDs}
                 userLikedReviewID={userLikedRevID}
+                locationName={locationName}
                 getLocationData={getLocationData}
               />
             )}

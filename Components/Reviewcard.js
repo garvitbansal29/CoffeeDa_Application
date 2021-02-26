@@ -28,6 +28,7 @@ const App = (props) => {
     userReviewIDs,
     userLikedReviewID,
     getLocationData,
+    locationName,
   } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -115,6 +116,7 @@ const App = (props) => {
   useEffect(() => {
     if (isFocused) {
       setAllCardData();
+      console.log(`CARD DATA????? ${JSON.stringify(cardDetails)}`);
     }
   }, [isFocused]);
 
@@ -125,6 +127,7 @@ const App = (props) => {
           visibility={modalVisible}
           hideModal={hideModal}
           review={review}
+          locationName={locationName}
         />
       </Portal>
       <Spinner

@@ -8,6 +8,7 @@ import {
   Modal,
   Text,
   RadioButton,
+  Title,
 } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Slider from '@react-native-community/slider';
@@ -15,7 +16,6 @@ import Geolocation from 'react-native-geolocation-service';
 import GetLocationPermission from '../../Components/PermissionManager';
 
 import {getLocationData as apiUtils} from '../../Components/apiUtils';
-import {styles} from '../../Components/AppStyle';
 import LocationDisplay from '../../Components/LocationDetailCard';
 import colours from '../../Components/ColourPallet';
 import Global from '../../Components/Global';
@@ -81,7 +81,12 @@ const App = ({navigation}) => {
         setLocationsData((data) => data.concat(responseData));
       }
     } else {
-      console.log(`>>>GET CAFE: NO DATA`);
+      if (resultOffset === 0) {
+        console.log(`>>>GET CAFE: NO DATA`);
+        setLocationsData([]);
+      } else {
+        console.log(`>>>GET CAFE: NO More DATA`);
+      }
       setIsEndFound(true);
     }
 
@@ -105,8 +110,9 @@ const App = ({navigation}) => {
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
   const openInMaps = () => {
-    navigation.navigate('Map', {
+    navigation.jumpTo('Map', {
       screen: 'MapDisplay',
+      initial: false,
       params: {locationsData},
     });
   };
@@ -138,7 +144,7 @@ const App = ({navigation}) => {
 
   const renderFooter = () => {
     return isLoading ? (
-      <View style={{marginBottom: 50, alignItems: 'center'}}>
+      <View style={{alignItems: 'center'}}>
         <ActivityIndicator size="large" color={colours.primary} />
       </View>
     ) : (
@@ -153,11 +159,16 @@ const App = ({navigation}) => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getCafeData();
   }, [resultOffset]);
 
+  const NoDataFoundError = () => {
+    return <Title>NO LOCATION FOUND</Title>;
+  };
+
   return (
-    <View style={{backgroundColor: colours.background}}>
+    <View style={{backgroundColor: colours.background, flex: 1}}>
       <Searchbar
         theme={{placeholder: 'black'}}
         placeholder="Search"
@@ -189,6 +200,11 @@ const App = ({navigation}) => {
           Open Map
         </Button>
       </View>
+
+      <View style={{alignItems: 'center'}}>
+        {!locationsData.length ? <NoDataFoundError /> : null}
+      </View>
+
       <FlatList
         data={locationsData}
         renderItem={({item}) => (
@@ -202,7 +218,7 @@ const App = ({navigation}) => {
         onEndReached={() => increaseResultOffSet()}
         onEndReachedThreshold={0.1}
         ListFooterComponent={() => renderFooter()}
-        contentContainerStyle={{paddingBottom: 100}}
+        contentContainerStyle={{paddingBottom: 25}}
       />
       <Modal
         visible={modalVisible}

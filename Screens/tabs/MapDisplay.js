@@ -10,13 +10,12 @@ import GetLocationPermission from '../../Components/PermissionManager';
 import Global from '../../Components/Global';
 import {getLocationData} from '../../Components/apiUtils';
 
-const App = (props) => {
-  const {navigation, route} = props;
+const App = ({navigation, route}) => {
   const [spinner, setSpinner] = useState(false);
   const [currLongitude, setLongitute] = useState(0);
   const [currLatitude, setLatitude] = useState(0);
   const [locationsData, setLocationsData] = useState([]);
-  const [filteredLocations, setFilteredLocations] = useState([]);
+  const [displaySearchResults, setDisplaySearchResults] = useState(false);
 
   const [centerCoords, setCenterCoords] = useState({
     latitude: 0,
@@ -74,9 +73,8 @@ const App = (props) => {
         setLatitude(position.coords.latitude);
         setLongitute(position.coords.longitude);
 
-        setLocationsData(route.params.locationData, (data) => {
-          getCenterCoords({locations: data});
-        });
+        setLocationsData(route.params.locationsData);
+        getCenterCoords({locations: route.params.locationsData});
       },
       (error) => {
         Alert.alert(error.message);
@@ -87,15 +85,22 @@ const App = (props) => {
         maximumAge: 1000,
       },
     );
-
     setSpinner(false);
   };
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
+    if (route.params) {
+      if (route.params.locationsData.length) {
+        console.log(`DISPLAYING SEARCH RESULTS`);
+        displaySeachResults();
+      } else {
+        console.log(`NOT DISPLAYING SEARCH RESULTS`);
+        getAllClosestsCafe();
+      }
+    } else {
       getAllClosestsCafe();
-    });
-  }, []);
+    }
+  }, [route]);
 
   return (
     <View style={{flex: 1}}>

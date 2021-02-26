@@ -217,7 +217,7 @@ export const addReviewImage = async (props) => {
 };
 
 // Refactored
-const addReview = async (props) => {
+export const addReview = async (props) => {
   const sessionToken = await getToken();
 
   const {
@@ -265,7 +265,7 @@ const addReview = async (props) => {
 };
 
 export const deleteReviewPhoto = async (props) => {
-  const sessionToken = getToken();
+  const sessionToken = await getToken();
   const {locationID, reviewID} = props;
   const settings = {
     method: 'DELETE',
@@ -617,7 +617,6 @@ export const updateReview = async (props) => {
 };
 
 export {
-  addReview,
   getUserDetails,
   updateUserDetails,
   getFavouriteLocations,
