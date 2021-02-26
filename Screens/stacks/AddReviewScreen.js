@@ -12,6 +12,7 @@ import {
   getUserReviewID,
 } from '../../Components/apiUtils';
 import {backgroundStyles} from '../../Components/AppStyle';
+import Colours from '../../Components/ColourPallet';
 
 const App = ({navigation, route, initialProps}) => {
   const [overallRating, setOverallRating] = useState(0);
@@ -22,6 +23,7 @@ const App = ({navigation, route, initialProps}) => {
   const [isImage, setIsImage] = useState(false);
   const [openCamera, setOpenCamera] = useState(false);
   const [image, setImage] = useState();
+  const [errorStatus, setErrorStatus] = useState();
 
   const [
     {cameraRef, type, ratio, autoFocus, autoFocusPoint},
@@ -48,31 +50,39 @@ const App = ({navigation, route, initialProps}) => {
   };
 
   const submitReview = async () => {
-    const requestSuccessful = await addReview({
-      locationID,
-      overallRating,
-      priceRating,
-      qualityRating,
-      cleanlinessRating,
-      reviewBody,
-    });
-
-    if (requestSuccessful) {
-      const userReviewIDs = await getUserReviewID();
-      userReviewIDs.sort((a, b) => b.reviewID - a.reviewID);
-      const newReview = userReviewIDs[0];
-      if (isImage) {
-        submitReviewPhoto(newReview);
-      }
-      Alert.alert('Review was added successfully!');
-      navigation.goBack();
+    if (!reviewBody.trim()) {
+      setErrorStatus(true);
     } else {
-      Alert.alert('Review was not added successfuly');
+      setErrorStatus(false);
+      const requestSuccessful = await addReview({
+        locationID,
+        overallRating,
+        priceRating,
+        qualityRating,
+        cleanlinessRating,
+        reviewBody,
+      });
+
+      if (requestSuccessful) {
+        const userReviewIDs = await getUserReviewID();
+        userReviewIDs.sort((a, b) => b.reviewID - a.reviewID);
+        const newReview = userReviewIDs[0];
+        if (isImage) {
+          submitReviewPhoto(newReview);
+        }
+        Alert.alert('Review was added successfully!');
+        navigation.goBack();
+      } else {
+        Alert.alert('Review was not added successfuly');
+      }
     }
   };
 
+  const InvalidReviewBody = () => {
+    return <Text style={{color: Colours.error}}>Please Enter A review</Text>;
+  };
+
   const AddReviewDisplay = () => {
-    const [rest, test] = useState('');
     return (
       <View style={backgroundStyles.container}>
         <View style={{alignItems: 'center'}}>
@@ -83,6 +93,8 @@ const App = ({navigation, route, initialProps}) => {
             onFinishRating={(rating) => setOverallRating(rating)}
           />
         </View>
+        {errorStatus ? <InvalidReviewBody /> : <View />}
+
         <TextInput
           mode="outlined"
           label="Review"
@@ -177,7 +189,7 @@ const App = ({navigation, route, initialProps}) => {
 
   return (
     <View style={{flex: 1}}>
-      {openCamera ? <CameraDisplay /> : <AddReviewDisplay />}
+      {openCamera ? <CameraDisplay /> : AddReviewDisplay()}
     </View>
   );
 };
