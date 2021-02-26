@@ -88,6 +88,10 @@ const App = ({navigation, route, initialProps}) => {
         <View style={{alignItems: 'center'}}>
           <Title>Write a Review for {locationName}! </Title>
           <Rating
+            type="custom"
+            ratingBackgroundColor={Colours.background}
+            ratingColor={Colours.accent}
+            tintColor={Colours.onBackground}
             startingValue={overallRating}
             style={{paddingVertical: 10}}
             onFinishRating={(rating) => setOverallRating(rating)}
@@ -106,33 +110,59 @@ const App = ({navigation, route, initialProps}) => {
         />
 
         <View style={{alignItems: 'flex-start'}}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{marginTop: 10, marginRight: 24}}>Price Rating:</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              margin: 6,
+              justifyContent: 'space-around',
+            }}
+          >
+            <Text style={{marginRight: 24}}>Price Rating:</Text>
             <Rating
+              type="custom"
+              ratingBackgroundColor={Colours.background}
+              ratingColor={Colours.accent}
+              tintColor={Colours.onBackground}
               startingValue={priceRating}
               style={{paddingVertical: 10}}
               onFinishRating={(rating) => setPriceRating(rating)}
-              imageSize={20}
+              imageSize={30}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              margin: 6,
+            }}
+          >
             <Text style={{marginTop: 10, marginRight: 24}}>Qulity Rating:</Text>
             <Rating
+              type="custom"
+              ratingBackgroundColor={Colours.background}
+              ratingColor={Colours.accent}
+              tintColor={Colours.onBackground}
               startingValue={qualityRating}
               style={{paddingVertical: 10}}
               onFinishRating={(rating) => setQualityRating(rating)}
-              imageSize={20}
+              imageSize={30}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', margin: 6}}>
             <Text style={{marginTop: 10, marginRight: 24}}>
               Cleanliness Rating:
             </Text>
             <Rating
+              type="custom"
+              ratingBackgroundColor={Colours.background}
+              ratingColor={Colours.accent}
+              tintColor={Colours.onBackground}
               startingValue={cleanlinessRating}
               style={{paddingVertical: 10}}
               onFinishRating={(rating) => setCleanlinessRating(rating)}
-              imageSize={20}
+              imageSize={30}
             />
           </View>
         </View>

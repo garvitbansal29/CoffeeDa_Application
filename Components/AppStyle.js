@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 const backgroundStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: defaultColourPallet.background,
+    backgroundColor: defaultColourPallet.onBackground,
   },
   containerWithAlignAndJustify: {
     flex: 1,

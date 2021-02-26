@@ -135,10 +135,7 @@ const App = (props) => {
         textContent="Loading..."
         textStyle={{color: '#FFF'}}
       />
-      <Card
-        elevation={12}
-        style={{margin: 6, backgroundColor: colours.onBackground}}
-      >
+      <Card elevation={12} style={{margin: 6}}>
         <Card.Content>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Title>Review ID: {review.reviewID}</Title>
@@ -156,10 +153,7 @@ const App = (props) => {
         {isImage ? <Card.Cover source={{uri: revImage}} /> : <View />}
 
         <Card.Content>
-          <Surface
-            elevation={6}
-            style={{marginTop: 12, backgroundColor: colours.onBackground}}
-          >
+          <Surface elevation={6} style={{marginTop: 12}}>
             <RatingIndicator
               rating={review.overallRating}
               label="Overall Rating"

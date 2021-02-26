@@ -92,8 +92,8 @@ const LocationDisplay = (props) => {
         <Rating
           type="custom"
           imageSize={25}
-          ratingColor={colors.accent}
-          ratingBackgroundColor={colors.primary}
+          ratingBackgroundColor={colors.onBackground}
+          ratingColor={colors.primary}
           tintColor={colors.surface}
           readonly
           startingValue={location.starRating}

@@ -74,12 +74,12 @@ const App = ({route, navigation}) => {
           {cafe.location_name}
         </Title>
         <Rating
-          imageSize={15}
+          imageSize={20}
           startingValue={cafe.avg_overall_rating}
           type="custom"
-          ratingBackgroundColor={colours.background}
+          ratingBackgroundColor={colours.accent}
           readonly
-          ratingColor={colours.accent}
+          ratingColor={colours.onBackground}
           tintColor={colours.primary}
           showRating
           ratingTextColor="white"

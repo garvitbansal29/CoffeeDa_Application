@@ -18,7 +18,7 @@ import {updateReview, deleteReview, deleteReviewPhoto} from './apiUtils';
 import filter from './filter';
 
 const App = ({hideModal, visibility, review, locationName}) => {
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  const containerStyle = {backgroundColor: Colours.background, padding: 20};
   const [reviewBody, setReviewBody] = useState(review.reviewBody);
   const [overallRating, setOverallRating] = useState(review.overallRating);
   const [priceRating, setPriceRating] = useState(review.priceRating);
@@ -122,6 +122,10 @@ const App = ({hideModal, visibility, review, locationName}) => {
           />
         </View>
         <Rating
+          type="custom"
+          ratingBackgroundColor={Colours.accent}
+          ratingColor={Colours.onBackground}
+          tintColor={Colours.background}
           startingValue={overallRating}
           style={{paddingVertical: 10}}
           onFinishRating={(rating) => setOverallRating(rating)}
@@ -140,20 +144,27 @@ const App = ({hideModal, visibility, review, locationName}) => {
         <View style={{flexDirection: 'row'}}>
           <Text style={{marginTop: 10, marginRight: 24}}>Price Rating:</Text>
           <Rating
+            type="custom"
+            ratingBackgroundColor={Colours.accent}
+            ratingColor={Colours.onBackground}
+            tintColor={Colours.background}
             startingValue={priceRating}
             style={{paddingVertical: 10}}
             onFinishRating={(rating) => setPriceRating(rating)}
-            imageSize={20}
+            imageSize={25}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text style={{marginTop: 10, marginRight: 24}}>Quality Rating:</Text>
           <Rating
+            type="custom"
+            ratingBackgroundColor={Colours.accent}
+            ratingColor={Colours.onBackground}
+            tintColor={Colours.background}
             startingValue={qualityRating}
             style={{paddingVertical: 10}}
-            // fractions={1}
             onFinishRating={(rating) => setQualityRating(rating)}
-            imageSize={20}
+            imageSize={25}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -161,11 +172,14 @@ const App = ({hideModal, visibility, review, locationName}) => {
             Cleanliness Rating:
           </Text>
           <Rating
+            type="custom"
+            ratingBackgroundColor={Colours.accent}
+            ratingColor={Colours.onBackground}
+            tintColor={Colours.background}
             startingValue={cleanlinessRating}
             style={{paddingVertical: 10}}
-            // fractions={1}
             onFinishRating={(rating) => setCleanlinessRating(rating)}
-            imageSize={20}
+            imageSize={25}
           />
         </View>
       </View>

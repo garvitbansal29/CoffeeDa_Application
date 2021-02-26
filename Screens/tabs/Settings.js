@@ -8,6 +8,7 @@ import {
   updateUserDetails,
   requestLogout,
 } from '../../Components/apiUtils';
+import Colours from '../../Components/ColourPallet';
 
 const App = ({navigation}) => {
   const [spinner, setSpinner] = useState(true);
@@ -54,7 +55,7 @@ const App = ({navigation}) => {
   }, []);
 
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: Colours.background}}>
       <Spinner
         visible={spinner}
         textContent="Loading..."

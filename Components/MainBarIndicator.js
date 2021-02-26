@@ -16,7 +16,7 @@ const App = (props) => {
       alignSelf: 'center',
     },
     lineBar: {
-      backgroundColor: Colours.accent,
+      backgroundColor: Colours.primary,
       height: 3,
       width: (200 / 5) * rating,
       borderBottomEndRadius: 10,

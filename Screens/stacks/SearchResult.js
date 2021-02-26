@@ -107,7 +107,7 @@ const App = ({navigation}) => {
     hideModal();
   };
 
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  const containerStyle = {backgroundColor: colours.onBackground, padding: 20};
 
   const openInMaps = () => {
     navigation.jumpTo('Map', {
@@ -168,7 +168,7 @@ const App = ({navigation}) => {
   };
 
   return (
-    <View style={{backgroundColor: colours.background, flex: 1}}>
+    <View style={{backgroundColor: colours.onBackground, flex: 1}}>
       <Searchbar
         theme={{placeholder: 'black'}}
         placeholder="Search"
@@ -222,7 +222,10 @@ const App = ({navigation}) => {
       />
       <Modal
         visible={modalVisible}
-        dismissable={false}
+        dismissable
+        onDismiss={() => {
+          hideModal();
+        }}
         contentContainerStyle={containerStyle}
       >
         <View style={{alignItems: 'center'}}>
